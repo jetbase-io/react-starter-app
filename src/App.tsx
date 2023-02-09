@@ -1,4 +1,3 @@
-import "./App.css";
 import "react-toastify/dist/ReactToastify.min.css";
 
 import { Elements } from "@stripe/react-stripe-js";
