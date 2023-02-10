@@ -2,7 +2,6 @@ import React, { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
-import Header from "../../components/Header";
 import Plans from "../../components/Plans";
 import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
 import { Dispatch, RootState } from "../../store/store";
@@ -22,17 +21,14 @@ const HomePage: FC = () => {
   }, []);
 
   return (
-    <div>
-      <Header />
-      <div className="w-[1200px] mx-auto pb-10">
-        <div className="flex justify-center items-center h-[250px]">
-          <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
-            Welcome to Starter App!
-          </h1>
-        </div>
-        <hr />
-        {isAuthenticated ? <Plans /> : <div />}
+    <div className="w-[1200px] mx-auto pb-10">
+      <div className="flex justify-center items-center h-[250px]">
+        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
+          Welcome to Starter App!
+        </h1>
       </div>
+      <hr />
+      {isAuthenticated ? <Plans /> : <div />}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import {
   UpdateUserAvatarPage,
   UpdateUsernamePage,
 } from "./pages";
+import ContactUsPage from "./pages/CountactUs";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import {
   BILLING_ROUTE,
@@ -20,6 +21,7 @@ import {
   RESET_PASSWORD_ROUTE,
   SIGN_IN_ROUTE,
   SIGN_UP_ROUTE,
+  CONTACT_US_ROUTE,
 } from "./store/constants/route-constants";
 
 interface Page {
@@ -84,6 +86,12 @@ const routes: Page[] = [
     title: "ForgotPassword",
     element: <ForgotPasswordPage />,
   },
+  {
+    id: 10,
+    path: CONTACT_US_ROUTE,
+    title: "ContactUsPage",
+    element: <ContactUsPage />,
+  }
 ];
 
 export default routes;

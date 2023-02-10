@@ -7,3 +7,4 @@ export const BILLING_ROUTE = "/billing";
 export const PROFILE_ROUTE = "/profile";
 export const PROFILE_ROUTE_UPDATE_USERNAME = "/profile/update-username";
 export const PROFILE_ROUTE_UPDATE_USER_AVATAR = "/profile/update-user-avatar";
+export const CONTACT_US_ROUTE = "/contact-us";
