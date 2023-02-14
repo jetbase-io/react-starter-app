@@ -12,6 +12,7 @@ import {
 } from "./pages";
 import ContactUsPage from "./pages/CountactUs";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import PlansPage from "./pages/PlansPage";
 import {
   BILLING_ROUTE,
   FORGOT_PASSWORD_ROUTE,
@@ -22,6 +23,7 @@ import {
   SIGN_IN_ROUTE,
   SIGN_UP_ROUTE,
   CONTACT_US_ROUTE,
+  PLANS_ROUTE,
 } from "./store/constants/route-constants";
 
 interface Page {
@@ -91,6 +93,12 @@ const routes: Page[] = [
     path: CONTACT_US_ROUTE,
     title: "ContactUsPage",
     element: <ContactUsPage />,
+  },
+  {
+    id: 11,
+    path: PLANS_ROUTE,
+    title: "PlansPage",
+    element: <PlansPage />,
   }
 ];
 

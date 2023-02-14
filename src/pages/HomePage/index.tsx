@@ -2,7 +2,6 @@ import React, { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
-import Plans from "../../components/Plans";
 import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
 import { Dispatch, RootState } from "../../store/store";
 
@@ -27,8 +26,6 @@ const HomePage: FC = () => {
           Welcome to Starter App!
         </h1>
       </div>
-      <hr />
-      {isAuthenticated ? <Plans /> : <div />}
     </div>
   );
 };

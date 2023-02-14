@@ -1,19 +1,17 @@
-import React, { FC, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { FC } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { BILLING_ROUTE } from "../../store/constants/route-constants";
-import { Dispatch, RootState } from "../../store/store";
+import { Dispatch } from "../../store/store";
 
-const Plans: FC = () => {
+interface IPlansProp {
+  plans: any[]
+}
+
+const Plans: FC<IPlansProp> = ({ plans }) => {
   const navigate = useNavigate();
-  const plansState = useSelector((state: RootState) => state.plan);
-  const { isAuthenticated } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<Dispatch>();
-
-  useEffect(() => {
-    if (isAuthenticated) dispatch.plan.getPlans();
-  }, []);
 
   const handleSubscribe = (title: string, id: string) => {
     dispatch.plan.setChosenPlan(id);
@@ -22,11 +20,8 @@ const Plans: FC = () => {
 
   return (
     <div className="block mx-auto p-6 bg-white">
-      <div className="flex flex-col items-center mb-12">
-        <h2 className="text-3xl text-primary-white font-bold">Pricing</h2>
-      </div>
       <div className="flex flex-col gap-4 lg:flex-row items-center lg:justify-center w-full lg:px-10 py-12">
-        {plansState.plans?.map(({ id, nickname, amount }) => (
+        {plans?.map(({ id, nickname, amount }) => (
           <div
             key={id}
             className="w-4/5 lg:w-custom mb-10 lg:px-4 py-10 text-center text-primary-dark bg-primary-white border border-gray-200 rounded-lg shadow"

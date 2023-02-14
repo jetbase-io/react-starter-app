@@ -17,13 +17,15 @@ const App: FC = () => {
     <div>
       <Header />
       <Elements stripe={stripePromise}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          {routes.map((route) => (
-            <Route path={route.path} element={route.element} key={route.id} />
-          ))}
-          <Route path={"/*"} element={<NotFoundPage />} />
-        </Routes>
+        <div className="max-w-screen-xl m-auto">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            {routes.map((route) => (
+              <Route path={route.path} element={route.element} key={route.id} />
+            ))}
+            <Route path={"/*"} element={<NotFoundPage />} />
+          </Routes>
+        </div>
       </Elements>
       <ToastContainer autoClose={8000} position={toast.POSITION.TOP_RIGHT} />
     </div>
