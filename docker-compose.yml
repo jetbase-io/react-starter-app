@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  frontend:
+    container_name: react-admin
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - basenet
+    volumes:
+      - '/app/node_modules'
+    expose:
+      - ${PORT}
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+networks:
+  basenet:
+    name: 'sessions-network'
