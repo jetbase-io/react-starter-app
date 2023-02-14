@@ -9,7 +9,7 @@ import { Dispatch } from '../../store/store';
 const PlansPage = () => {
   const navigate = useNavigate();
   const isAuthenticated = useTypedSelector((state) => state.user.isAuthenticated);
-  const plans = useTypedSelector((state) => state.plan.plans);
+  const { plans, chosenPlan } = useTypedSelector((state) => state.plan);
   const dispatch = useDispatch<Dispatch>();
 
   useEffect(() => {
@@ -18,11 +18,11 @@ const PlansPage = () => {
   }, []);
 
   return (
-    <div className='mt-12'>
+    <div className='mt-12 shadow-xl rounded-lg'>
       <div className="flex flex-col items-center mb-12">
         <h2 className="text-6xl text-primary-white font-bold">Pricing</h2>
       </div>
-      <Plans plans={plans}/> 
+      <Plans plans={plans} chosenPlan={chosenPlan}/> 
     </div>
   )
 }

@@ -11,3 +11,12 @@ export const setUserTokensToLocalStorage = (accessToken: string, refreshToken: s
 export const getIsAuthenticated = () => !!localStorage.getItem("accessToken");
 export const getAccessToken = () => localStorage.getItem("accessToken");
 export const getRefreshToken = () => localStorage.getItem("refreshToken");
+
+export const parseJwt = (token: string) => {
+  try {
+    if (!token?.length) return null;
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+};

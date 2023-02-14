@@ -47,8 +47,10 @@ http.interceptors.response.use(
         );
         setUserTokensToLocalStorage(response.data.accessToken, response.data.refreshToken);
         error.config.headers = {
+          ...error.config.headers,
           Authorization: `Bearer ${response.data.accessToken}`,
         };
+        if (response.data.accessToken?.length) refresh = false;
         return await http.request(error.config);
       } catch (er) {
         cleanUserTokensFromLocalStorage();

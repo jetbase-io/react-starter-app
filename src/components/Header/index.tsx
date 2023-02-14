@@ -17,23 +17,17 @@ import HeaderLink from "../HeaderLink";
 
 type HeaderPageProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
 
-const Header: FC<HeaderPageProps> = ({ isAuthenticated, nickname, signOut, fullSignOut }) => {
+const Header: FC<HeaderPageProps> = ({ isAuthenticated, signOut }) => {
   const [openBurger, setOpenBurger] = useState(false);
 
   const handleSignOutClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     signOut();
   };
-  const handleFullSignOutClick: React.MouseEventHandler<HTMLAnchorElement> = () => {
-    fullSignOut();
-  };
 
   const LINKS = [
-    { id: 0, text: "Plans", to: PLANS_ROUTE, isVisible: isAuthenticated },
-    { id: 1, text: "Reset Password", to: RESET_PASSWORD_ROUTE, isVisible: isAuthenticated },
-    { id: 2, text: "Full Sign Out", to: SIGN_IN_ROUTE, isVisible: isAuthenticated, onClick: handleFullSignOutClick },
-    { id: 4, text: "Sign In", to: SIGN_IN_ROUTE, isVisible: !isAuthenticated },
-    { id: 5, text: "Sign Up", to: SIGN_UP_ROUTE, isVisible: !isAuthenticated },
-    { id: 6, text: "My Profile", to: PROFILE_ROUTE, isVisible: isAuthenticated },
+    { id: 0, text: "Main", to: "/", isVisible: isAuthenticated },
+    { id: 1, text: "Plans", to: PLANS_ROUTE, isVisible: isAuthenticated },
+    { id: 2, text: "My Profile", to: PROFILE_ROUTE, isVisible: isAuthenticated },
   ];
 
   const toggle = () => {
@@ -65,8 +59,8 @@ const Header: FC<HeaderPageProps> = ({ isAuthenticated, nickname, signOut, fullS
           <div className={`${burgerClass} justify-between items-center w-full lg:flex lg:w-auto lg:order-1`} id="mobile-menu-2">
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
               {LINKS.map(
-                ({ id, text, to, isVisible, onClick }) =>
-                  isVisible && <HeaderLink key={id} text={text} to={to} onClick={onClick} />
+                ({ id, text, to, isVisible }) =>
+                  isVisible && <HeaderLink key={id} text={text} to={to} />
               )}
             </ul>
           </div>
@@ -82,12 +76,10 @@ Header.propTypes = {
 
 const mapState = (state: RootState) => ({
   isAuthenticated: state.user.isAuthenticated,
-  nickname: state.user.subscription.nickname,
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({
   signOut: dispatch.user.signOut,
-  fullSignOut: dispatch.user.fullSignOut,
 });
 
 export default connect(mapState, mapDispatch)(Header);

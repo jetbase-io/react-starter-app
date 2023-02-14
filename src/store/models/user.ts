@@ -34,6 +34,13 @@ type UserState = {
   refreshToken: "";
   paymentMethods: Array<{ id: string; card: { brand: string; last4: string } }>;
   subscription: { nickname: string; status: string };
+  id?: "",
+  username?: "",
+  avatar?: null,
+  created_at?: "";
+  customerStripeId?: null;
+  email?: "";
+  roles?: "";
 };
 
 export const user = createModel<RootModel>()({
@@ -73,6 +80,13 @@ export const user = createModel<RootModel>()({
         subscription,
       };
     },
+
+    setUser(state, user) {
+      return {
+        ...state,
+        ...user,
+      }
+    }
   },
   effects: (dispatch) => ({
     async signUp({ username, email, password }) {
@@ -146,6 +160,17 @@ export const user = createModel<RootModel>()({
         const result = await http.post(FULL_SIGN_OUT_URL);
         if (result.request.status === 201) {
           this.logOutUser();
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    async getUser(id: string) {
+      try {
+        const result = await http.get(`${UPDATE_USERNAME}${id}`);
+        if (result.request.status === 200) {
+          dispatch.user.setUser(result.data)
         }
       } catch (error) {
         throw error;

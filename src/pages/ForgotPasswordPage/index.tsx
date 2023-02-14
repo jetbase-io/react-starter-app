@@ -37,7 +37,7 @@ const ForgotPasswordPage: FC<ForgotPasswordProps> = ({ isAuthenticated, resetPas
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
+    <div className="min-h-screen flex flex-col justify-center">
       <div className="max-w-md w-full mx-auto">
         <div className="text-center font-medium text-xl">Forgot Password</div>
       </div>

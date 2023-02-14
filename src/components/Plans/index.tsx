@@ -6,10 +6,11 @@ import { BILLING_ROUTE } from "../../store/constants/route-constants";
 import { Dispatch } from "../../store/store";
 
 interface IPlansProp {
-  plans: any[]
+  plans: any[],
+  chosenPlan: any
 }
 
-const Plans: FC<IPlansProp> = ({ plans }) => {
+const Plans: FC<IPlansProp> = ({ plans, chosenPlan }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<Dispatch>();
 
@@ -19,14 +20,15 @@ const Plans: FC<IPlansProp> = ({ plans }) => {
   };
 
   return (
-    <div className="block mx-auto p-6 bg-white">
+    <div className="block mx-auto p-6">
       <div className="flex flex-col gap-4 lg:flex-row items-center lg:justify-center w-full lg:px-10 py-12">
         {plans?.map(({ id, nickname, amount }) => (
           <div
             key={id}
-            className="w-4/5 lg:w-custom mb-10 lg:px-4 py-10 text-center text-primary-dark bg-primary-white border border-gray-200 rounded-lg shadow"
+            className="w-4/5 lg:w-custom mb-10 lg:px-4 py-10 text-center text-primary-dark bg-primary-white border border-gray-200 rounded-lg shadow relative"
           >
-            <h5 className="font-bold text-base">{nickname}</h5>
+            <h3 className="absolute left-3 top-3 uppercase">{id === chosenPlan.id ? 'Active' : ''}</h3>
+            <h5 className="font-bold text-base">{nickname || 'PLAN'}</h5>
             <h2 className="pb-4 flex justify-center font-bold border-b border-gray-300">
               <span className="text-6xl mr-1">$</span>
               <span className="text-6xl">{amount / 100}</span>

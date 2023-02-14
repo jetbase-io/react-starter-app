@@ -103,7 +103,7 @@ const BillingPage: FC = () => {
 
   return (
     <div>
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
+      <div className="min-h-screen flex flex-col justify-center shadow-xl rounded-lg">
         <div className="max-w-md w-full mx-auto">
           <div className="text-center font-medium text-xl">Billing Details</div>
         </div>

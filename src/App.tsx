@@ -1,7 +1,7 @@
 import "react-toastify/dist/ReactToastify.min.css";
 
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
 import React, { FC } from "react";
 import { Route, Routes } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -10,14 +10,19 @@ import { HomePage, NotFoundPage } from "./pages/index";
 import routes from "./routes";
 import Header from "./components/Header";
 
+let stripePromise: Promise<Stripe | null>;
+
 const App: FC = () => {
-  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY || "");
+
+  if (!stripePromise) {
+    stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY || "");
+  }
 
   return (
     <div>
       <Header />
       <Elements stripe={stripePromise}>
-        <div className="max-w-screen-xl m-auto">
+        <div className="max-w-screen-xl m-auto ">
           <Routes>
             <Route path="/" element={<HomePage />} />
             {routes.map((route) => (

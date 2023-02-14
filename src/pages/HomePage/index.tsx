@@ -20,7 +20,7 @@ const HomePage: FC = () => {
   }, []);
 
   return (
-    <div className="w-[1200px] mx-auto pb-10">
+    <div className="mt-10 mx-auto pb-10 shadow-xl rounded-lg">
       <div className="flex justify-center items-center h-[250px]">
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
           Welcome to Starter App!
