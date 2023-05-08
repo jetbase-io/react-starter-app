@@ -10,9 +10,9 @@ import {
 import { REFRESH_TOKEN_URL } from "../constants/api-contstants";
 import { SIGN_IN_ROUTE } from "../constants/route-constants";
 
-const http = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-});
+const baseURL = process.env.REACT_APP_API_URL;
+
+const http = axios.create({ baseURL });
 
 http.interceptors.request.use(
   async (config: AxiosRequestConfig) => {
@@ -37,7 +37,7 @@ http.interceptors.response.use(
       refresh = true;
       try {
         const response = await axios.post(
-          process.env.REACT_APP_API_URL + REFRESH_TOKEN_URL,
+          `${baseURL}/${REFRESH_TOKEN_URL}`,
           {},
           {
             headers: {
@@ -45,7 +45,10 @@ http.interceptors.response.use(
             },
           }
         );
-        setUserTokensToLocalStorage(response.data.accessToken, response.data.refreshToken);
+        setUserTokensToLocalStorage(
+          response.data.accessToken,
+          response.data.refreshToken
+        );
         error.config.headers = {
           ...error.config.headers,
           Authorization: `Bearer ${response.data.accessToken}`,
