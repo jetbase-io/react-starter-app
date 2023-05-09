@@ -1,5 +1,4 @@
 import { createModel } from "@rematch/core";
-import axios from "axios";
 import { toast } from "react-toastify";
 
 import history from "../../helpers/history";
@@ -32,6 +31,7 @@ import type { RootModel } from "./index";
 type UserState = {
   isAuthenticated: boolean;
   isSignedUp: boolean;
+  isConfirmed: boolean;
   accessToken: "";
   refreshToken: "";
   paymentMethods: Array<{ id: string; card: { brand: string; last4: string } }>;
@@ -51,6 +51,7 @@ export const user = createModel<RootModel>()({
     accessToken: getAccessToken(),
     refreshToken: getRefreshToken(),
     isSignedUp: false,
+    isConfirmed: false,
     paymentMethods: [],
     subscription: { nickname: "", status: STRIPE_INACTIVE_STATUS },
   } as UserState,
@@ -66,6 +67,13 @@ export const user = createModel<RootModel>()({
       return {
         ...state,
         isSignedUp: isSuccessful,
+      };
+    },
+
+    setIsConfirmed(state, isSuccessful) {
+      return {
+        ...state,
+        isConfirmed: isSuccessful,
       };
     },
 
@@ -130,6 +138,7 @@ export const user = createModel<RootModel>()({
         const response = responseText?.length ? JSON.parse(responseText) : null;
         if (result.request.status === 200) {
           toast.success(response?.message);
+          dispatch.user.setIsConfirmed(true);
         } else {
           toast.error(response?.message?.toString());
         }

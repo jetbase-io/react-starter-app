@@ -4,10 +4,25 @@ import { connect } from "react-redux";
 import SignUpForm from "./SignUpForm";
 import Placeholder from "./Placeholder";
 import { Dispatch, RootState } from "../../store/store";
+import { Navigate, useNavigate } from "react-router";
 
 type SignUpProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
 
-const SignUpPage: FC<SignUpProps> = ({ isSignedUp, signUp }) => {
+const SignUpPage: FC<SignUpProps> = ({
+  isSignedUp,
+  isAuthenticated,
+  signUp,
+}) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    return navigate("/");
+  };
+
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
       {!isSignedUp ? (
@@ -18,7 +33,14 @@ const SignUpPage: FC<SignUpProps> = ({ isSignedUp, signUp }) => {
           <SignUpForm handleSignUp={signUp} />
         </>
       ) : (
-        <Placeholder />
+        <Placeholder
+          title={"You have been successfully signed up!"}
+          message={
+            "Please check your inbox and confirm an email address to be able to sign in."
+          }
+          btnTitle="Go to the Home page"
+          onClick={handleClick}
+        />
       )}
     </div>
   );
@@ -26,6 +48,7 @@ const SignUpPage: FC<SignUpProps> = ({ isSignedUp, signUp }) => {
 
 const mapState = (state: RootState) => ({
   isSignedUp: state.user?.isSignedUp,
+  isAuthenticated: state.user?.isAuthenticated,
 });
 
 const mapDispatch = (dispatch: Dispatch) => ({

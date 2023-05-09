@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useFormik } from "formik";
 import { FC, useEffect } from "react";
 import { connect } from "react-redux";
-import { Link, Navigate, useLocation, useParams } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import * as Yup from "yup";
 
 import {
