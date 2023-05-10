@@ -1,5 +1,4 @@
 import { createModel } from "@rematch/core";
-import axios from "axios";
 import { toast } from "react-toastify";
 
 import history from "../../helpers/history";
@@ -13,6 +12,7 @@ import {
 import {
   ACTIVATE_SUBSCRIPTION_URL,
   CHECK_SUBSCRIPTION_URL,
+  CONFIRMATION_URL,
   DETACH_PAYMENT_METHODS,
   FULL_SIGN_OUT_URL,
   GET_PAYMENT_METHODS_URL,
@@ -30,13 +30,15 @@ import type { RootModel } from "./index";
 
 type UserState = {
   isAuthenticated: boolean;
+  isSignedUp: boolean;
+  isConfirmed: boolean;
   accessToken: "";
   refreshToken: "";
   paymentMethods: Array<{ id: string; card: { brand: string; last4: string } }>;
   subscription: { nickname: string; status: string };
-  id?: "",
-  username?: "",
-  avatar?: null,
+  id?: "";
+  username?: "";
+  avatar?: null;
   created_at?: "";
   customerStripeId?: null;
   email?: "";
@@ -48,6 +50,8 @@ export const user = createModel<RootModel>()({
     isAuthenticated: getIsAuthenticated(),
     accessToken: getAccessToken(),
     refreshToken: getRefreshToken(),
+    isSignedUp: false,
+    isConfirmed: false,
     paymentMethods: [],
     subscription: { nickname: "", status: STRIPE_INACTIVE_STATUS },
   } as UserState,
@@ -57,6 +61,20 @@ export const user = createModel<RootModel>()({
         ...state,
         isAuthenticated,
       } as UserState;
+    },
+
+    setIsSignedUp(state, isSuccessful) {
+      return {
+        ...state,
+        isSignedUp: isSuccessful,
+      };
+    },
+
+    setIsConfirmed(state, isSuccessful) {
+      return {
+        ...state,
+        isConfirmed: isSuccessful,
+      };
     },
 
     setTokens(state, { accessToken, refreshToken }) {
@@ -85,8 +103,8 @@ export const user = createModel<RootModel>()({
       return {
         ...state,
         ...user,
-      }
-    }
+      };
+    },
   },
   effects: (dispatch) => ({
     async signUp({ username, email, password }) {
@@ -102,7 +120,25 @@ export const user = createModel<RootModel>()({
         const response = responseText?.length ? JSON.parse(responseText) : null;
         if (result.request.status === 201) {
           toast.success(response?.message);
-          history.push(SIGN_IN_ROUTE);
+          dispatch.user.setIsSignedUp(true);
+        } else {
+          toast.error(response?.message?.toString());
+        }
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async confirm({ token }) {
+      // TODO processing error...
+      // eslint-disable-next-line no-useless-catch
+      try {
+        const result = await http.patch(CONFIRMATION_URL, { token });
+        const responseText = result.request?.responseText;
+        const response = responseText?.length ? JSON.parse(responseText) : null;
+        if (result.request.status === 200) {
+          toast.success(response?.message);
+          dispatch.user.setIsConfirmed(true);
         } else {
           toast.error(response?.message?.toString());
         }
@@ -125,7 +161,10 @@ export const user = createModel<RootModel>()({
             accessToken: result.data.accessToken,
             refreshToken: result.data.refreshToken,
           });
-          setUserTokensToLocalStorage(result.data.accessToken, result.data.refreshToken);
+          setUserTokensToLocalStorage(
+            result.data.accessToken,
+            result.data.refreshToken
+          );
           await this.checkSubscription();
         } else {
           const responseText = result.request?.responseText;
@@ -144,7 +183,9 @@ export const user = createModel<RootModel>()({
       // TODO processing error...
       // eslint-disable-next-line no-useless-catch
       try {
-        const result = await http.post(SIGN_OUT_URL, { refreshToken: getRefreshToken() });
+        const result = await http.post(SIGN_OUT_URL, {
+          refreshToken: getRefreshToken(),
+        });
         if (result.request.status === 201) {
           this.logOutUser();
         }
@@ -170,7 +211,7 @@ export const user = createModel<RootModel>()({
       try {
         const result = await http.get(`${UPDATE_USERNAME}${id}`);
         if (result.request.status === 200) {
-          dispatch.user.setUser(result.data)
+          dispatch.user.setUser(result.data);
         }
       } catch (error) {
         throw error;
@@ -207,7 +248,9 @@ export const user = createModel<RootModel>()({
         });
         if (result.request.status === 200) {
           const newUsername = result.data.username;
-          toast.success(`Username is updated! Your new username is: ${newUsername}`);
+          toast.success(
+            `Username is updated! Your new username is: ${newUsername}`
+          );
           history.push(HOME_ROUTE);
         }
         if (result.request.status === 400) {
@@ -240,10 +283,11 @@ export const user = createModel<RootModel>()({
       }
     },
 
-    async activateSubscription({
-      paymentMethodId,
-      priceId,
-    }): Promise<{ clientSecret: string; status: string; nickname: string | null }> {
+    async activateSubscription({ paymentMethodId, priceId }): Promise<{
+      clientSecret: string;
+      status: string;
+      nickname: string | null;
+    }> {
       const { data } = await http.post(ACTIVATE_SUBSCRIPTION_URL, {
         paymentMethod: paymentMethodId,
         priceId,

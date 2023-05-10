@@ -1,24 +1,41 @@
 import classNames from "classnames";
 import { useFormik } from "formik";
-import React, { FC } from "react";
+import { FC, useEffect } from "react";
 import { connect } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import * as Yup from "yup";
 
-import { FORGOT_PASSWORD_ROUTE, RESET_PASSWORD_ROUTE, SIGN_UP_ROUTE } from "../../store/constants/route-constants";
+import {
+  FORGOT_PASSWORD_ROUTE,
+  SIGN_UP_ROUTE,
+} from "../../store/constants/route-constants";
 import { Dispatch, RootState } from "../../store/store";
+
+const TOKEN = "confirmation_token";
 
 type SignInProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
 
-const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn }) => {
+const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn, confirm }) => {
+  const { search } = useLocation();
+  const token = new URLSearchParams(search).get(TOKEN);
+
+  useEffect(() => {
+    if (!token) return;
+    confirm({ token });
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().min(6, "Minimum 6 characters required").required("Required"),
-      password: Yup.string().min(6, "Minimum 6 characters required").required("Required"),
+      username: Yup.string()
+        .min(6, "Minimum 6 characters required")
+        .required("Required"),
+      password: Yup.string()
+        .min(6, "Minimum 6 characters required")
+        .required("Required"),
     }),
     onSubmit: (values) => {
       signIn({
@@ -80,14 +97,23 @@ const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn }) => {
             ) : null}
           </div>
           <div>
-            <button type="submit" className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}>
+            <button
+              type="submit"
+              className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}
+            >
               Sign In
             </button>
             <div className="mt-5 flex justify-between">
-              <Link className="font-small text-blue-400 dark:text-blue-500 hover:underline" to={SIGN_UP_ROUTE}>
+              <Link
+                className="font-small text-blue-400 dark:text-blue-500 hover:underline"
+                to={SIGN_UP_ROUTE}
+              >
                 Don't have an account?
               </Link>
-              <Link className="font-small text-blue-400 dark:text-blue-500 hover:underline" to={FORGOT_PASSWORD_ROUTE}>
+              <Link
+                className="font-small text-blue-400 dark:text-blue-500 hover:underline"
+                to={FORGOT_PASSWORD_ROUTE}
+              >
                 Forgot password?
               </Link>
             </div>
@@ -104,6 +130,7 @@ const mapState = (state: RootState) => ({
 
 const mapDispatch = (dispatch: Dispatch) => ({
   signIn: dispatch.user.signIn,
+  confirm: dispatch.user.confirm,
 });
 
 export default connect(mapState, mapDispatch)(SignInPage);
