@@ -39,9 +39,9 @@ const ConfirmationPage: FC<ConfirmationProps> = ({
           <Placeholder
             title={"Confirmation successful!"}
             message={
-              "Thank you for confirmation your email address. Now you can sing in."
+              "Thank you for confirmation your email address. Now you can sign in."
             }
-            btnTitle={"Go to the Sing in page"}
+            btnTitle={"Go to the Sign in page"}
             onClick={handleClick}
           />
         ) : (
