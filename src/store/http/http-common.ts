@@ -10,7 +10,7 @@ import {
 import { REFRESH_TOKEN_URL } from "../constants/api-contstants";
 import { SIGN_IN_ROUTE } from "../constants/route-constants";
 
-const baseURL = process.env.REACT_APP_API_URL;
+const baseURL = import.meta.env.VITE_REACT_APP_API_URL;
 
 const http = axios.create({ baseURL });
 
