@@ -13,9 +13,8 @@ import Header from "./components/Header";
 let stripePromise: Promise<Stripe | null>;
 
 const App: FC = () => {
-
   if (!stripePromise) {
-    stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY || "");
+    stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "");
   }
 
   return (
