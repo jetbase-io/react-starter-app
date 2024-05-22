@@ -14,9 +14,7 @@ let stripePromise: Promise<Stripe | null>;
 
 const App: FC = () => {
   if (!stripePromise) {
-    stripePromise = loadStripe(
-      import.meta.env.VITE_REACT_APP_STRIPE_PUBLIC_KEY || ""
-    );
+    stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "");
   }
 
   return (
