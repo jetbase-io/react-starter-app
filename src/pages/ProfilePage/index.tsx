@@ -1,68 +1,76 @@
-import React, { FC, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import { FC } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { parseJwt } from "../../helpers/user";
-import { PROFILE_ROUTE_UPDATE_USERNAME, PROFILE_ROUTE_UPDATE_USER_AVATAR, RESET_PASSWORD_ROUTE } from "../../store/constants/route-constants";
+import {
+  PROFILE_ROUTE_UPDATE_USERNAME,
+  PROFILE_ROUTE_UPDATE_USER_AVATAR,
+  RESET_PASSWORD_ROUTE,
+} from "../../store/constants/route-constants";
 
-import { Dispatch, RootState } from "../../store/store";
+import { RootState } from "../../store/store";
+import { useFullSignOut } from "../../hooks/user/useFullSignOut";
+import { useUser } from "../../hooks/user/useUser";
 
-type ProfileProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
+type ProfileProps = ReturnType<typeof mapState>;
 
-const ProfilePage: FC<ProfileProps> = ({ isAuthenticated, subscriptionPlan, subscriptionStatus, userToken, user, fullSignOut }) => {
-  const dispatch = useDispatch<Dispatch>();
+const ProfilePage: FC<ProfileProps> = ({ isAuthenticated, userToken }) => {
+  const { mutate: fullSignOut } = useFullSignOut();
+
   if (!isAuthenticated) {
     return <Navigate to="/" />;
   }
 
-  useEffect(() => {
-    if (!user?.id && userToken?.id) dispatch.user.getUser(userToken.id);
-  }, [user?.id]);
+  const { user } = useUser(userToken.id);
 
   return (
     <section className="relative py-16">
-      <div className="container mx-auto px-4">
-        <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg">
+      <div className="container px-4 mx-auto">
+        <div className="relative flex flex-col w-full min-w-0 mb-6 break-words bg-white rounded-lg shadow-xl">
           <div className="px-6">
-            <div className="text-center mt-12">
-              <h3 className="text-4xl font-semibold leading-normal text-gray-800 mb-2">
+            <div className="mt-12 text-center">
+              <h3 className="mb-2 text-4xl font-semibold leading-normal text-gray-800">
                 {user?.username || "User"}
               </h3>
-              <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
+              <div className="mt-0 mb-2 text-sm font-bold leading-normal text-gray-500">
                 {user?.email || "user@mail.com"}
               </div>
               <div className="mt-10">
                 <Link
                   to={PROFILE_ROUTE_UPDATE_USERNAME}
-                  className="font-normal text-pink-500 mr-10"
+                  className="mr-10 font-normal text-pink-500"
                 >
                   Change Username
                 </Link>
                 <Link
                   to={PROFILE_ROUTE_UPDATE_USER_AVATAR}
-                  className="font-normal text-pink-500 mr-10"
+                  className="mr-10 font-normal text-pink-500"
                 >
                   Change Profile Picture
                 </Link>
                 <Link
                   to={RESET_PASSWORD_ROUTE}
-                  className="font-normal text-pink-500  mr-10"
+                  className="mr-10 font-normal text-pink-500"
                 >
                   Reset Password
                 </Link>
                 <span
-                  onClick={fullSignOut}
+                  onClick={() => fullSignOut()}
                   className="font-normal text-pink-500 cursor-pointer"
                 >
                   Full Sign Out
                 </span>
               </div>
             </div>
-            <div className="mt-10 py-10 border-t border-gray-300 text-center">
+            <div className="py-10 mt-10 text-center border-t border-gray-300">
               <div className="flex flex-wrap justify-center">
-                <div className="w-full lg:w-9/12 px-4">
+                <div className="w-full px-4 lg:w-9/12">
                   <p className="mb-4 text-lg leading-relaxed text-gray-800">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi laborum perspiciatis quidem labore quam eligendi suscipit, quaerat obcaecati similique aut repellendus ab veniam provident odit odio esse vero earum facilis!
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Animi laborum perspiciatis quidem labore quam eligendi
+                    suscipit, quaerat obcaecati similique aut repellendus ab
+                    veniam provident odit odio esse vero earum facilis!
                   </p>
                 </div>
               </div>
@@ -76,14 +84,7 @@ const ProfilePage: FC<ProfileProps> = ({ isAuthenticated, subscriptionPlan, subs
 
 const mapState = (state: RootState) => ({
   isAuthenticated: state.user?.isAuthenticated,
-  subscriptionPlan: state.user?.subscription.nickname,
-  subscriptionStatus: state.user?.subscription.status,
   userToken: parseJwt(state.user.accessToken),
-  user: state.user,
 });
 
-const mapDispatch = (dispatch: Dispatch) => ({
-  fullSignOut: dispatch.user.fullSignOut,
-});
-
-export default connect(mapState, mapDispatch)(ProfilePage);
+export default connect(mapState)(ProfilePage);

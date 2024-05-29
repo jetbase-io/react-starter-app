@@ -6,13 +6,15 @@ import { Navigate, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
-import { Dispatch, RootState } from "../../store/store";
+import { RootState } from "../../store/store";
+import { useResetPassword } from "../../hooks/user/useResetPassword";
 
 type IPasswordValues = Record<string, string>;
 
-type ResetPasswordProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
-const ResetPasswordPage: FC<ResetPasswordProps> = ({ isAuthenticated, resetPassword }) => {
+type ResetPasswordProps = ReturnType<typeof mapState>;
+const ResetPasswordPage: FC<ResetPasswordProps> = ({ isAuthenticated }) => {
   const navigate = useNavigate();
+  const { mutate: resetPassword } = useResetPassword();
 
   const passwordValues: IPasswordValues = {
     oldPassword: "",
@@ -23,9 +25,16 @@ const ResetPasswordPage: FC<ResetPasswordProps> = ({ isAuthenticated, resetPassw
   const formik = useFormik({
     initialValues: passwordValues,
     validationSchema: Yup.object({
-      oldPassword: Yup.string().min(6, "Minimum 6 characters required").required("Required"),
-      newPassword: Yup.string().min(6, "Minimum 6 characters required").required("Required"),
-      confirmPassword: Yup.string().oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
+      oldPassword: Yup.string()
+        .min(6, "Minimum 6 characters required")
+        .required("Required"),
+      newPassword: Yup.string()
+        .min(6, "Minimum 6 characters required")
+        .required("Required"),
+      confirmPassword: Yup.string().oneOf(
+        [Yup.ref("newPassword"), null],
+        "Passwords must match"
+      ),
     }),
     onSubmit: (values) => {
       resetPassword({
@@ -53,15 +62,18 @@ const ResetPasswordPage: FC<ResetPasswordProps> = ({ isAuthenticated, resetPassw
   ];
 
   return (
-    <div className="min-h-screen flex flex-col justify-center">
-      <div className="max-w-md w-full mx-auto">
-        <div className="text-center font-medium text-xl">Reset Password</div>
+    <div className="flex flex-col justify-center min-h-screen">
+      <div className="w-full max-w-md mx-auto">
+        <div className="text-xl font-medium text-center">Reset Password</div>
       </div>
-      <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-md">
+      <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300 rounded-md">
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           {inputs.map((input) => (
             <div key={input.id}>
-              <label htmlFor={input.name} className="text-sm font-bold text-gray-600 block">
+              <label
+                htmlFor={input.name}
+                className="block text-sm font-bold text-gray-600"
+              >
                 {input.label}
               </label>
               <input
@@ -70,15 +82,21 @@ const ResetPasswordPage: FC<ResetPasswordProps> = ({ isAuthenticated, resetPassw
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 type="password"
-                className="w-full p-2 border border-gray-300 rounded mt-1"
+                className="w-full p-2 mt-1 border border-gray-300 rounded"
               />
-              {formik.touched[`${input.name}`] && formik.errors[`${input.name}`] && (
-                <p className="text-red-500">{formik.errors[`${input.name}`]}</p>
-              )}
+              {formik.touched[`${input.name}`] &&
+                formik.errors[`${input.name}`] && (
+                  <p className="text-red-500">
+                    {formik.errors[`${input.name}`]}
+                  </p>
+                )}
             </div>
           ))}
           <div>
-            <button type="submit" className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}>
+            <button
+              type="submit"
+              className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}
+            >
               Reset
             </button>
           </div>
@@ -92,8 +110,4 @@ const mapState = (state: RootState) => ({
   isAuthenticated: state.user?.isAuthenticated,
 });
 
-const mapDispatch = (dispatch: Dispatch) => ({
-  resetPassword: dispatch.user.resetPassword,
-});
-
-export default connect(mapState, mapDispatch)(ResetPasswordPage);
+export default connect(mapState)(ResetPasswordPage);

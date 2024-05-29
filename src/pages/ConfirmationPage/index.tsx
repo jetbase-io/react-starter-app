@@ -4,24 +4,25 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { Dispatch, RootState } from "../../store/store";
 import Placeholder from "../SignUpPage/Placeholder";
+import { useConfirm } from "../../hooks/user/useConfirm";
 
 const TOKEN = "confirmation_token";
 
-type ConfirmationProps = ReturnType<typeof mapState> &
-  ReturnType<typeof mapDispatch>;
+type ConfirmationProps = ReturnType<typeof mapState>;
 
 const ConfirmationPage: FC<ConfirmationProps> = ({
   isAuthenticated,
   isConfirmed,
-  confirm,
 }) => {
   const { search } = useLocation();
   const token = new URLSearchParams(search).get(TOKEN);
   const navigate = useNavigate();
+  const { mutate: confirm } = useConfirm();
 
   useEffect(() => {
     if (!token) return;
-    confirm({ token });
+
+    confirm(token);
   }, []);
 
   const handleClick = () => {
@@ -33,8 +34,8 @@ const ConfirmationPage: FC<ConfirmationProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
-      <div className="max-w-md w-full mx-auto">
+    <div className="flex flex-col justify-center min-h-screen bg-gray-50">
+      <div className="w-full max-w-md mx-auto">
         {isConfirmed ? (
           <Placeholder
             title={"Confirmation successful!"}
@@ -62,8 +63,4 @@ const mapState = (state: RootState) => ({
   isAuthenticated: state.user?.isAuthenticated,
 });
 
-const mapDispatch = (dispatch: Dispatch) => ({
-  confirm: dispatch.user.confirm,
-});
-
-export default connect(mapState, mapDispatch)(ConfirmationPage);
+export default connect(mapState)(ConfirmationPage);

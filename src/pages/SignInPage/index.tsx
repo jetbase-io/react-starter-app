@@ -9,19 +9,24 @@ import {
   FORGOT_PASSWORD_ROUTE,
   SIGN_UP_ROUTE,
 } from "../../store/constants/route-constants";
-import { Dispatch, RootState } from "../../store/store";
+import { RootState } from "../../store/store";
+import { useSignIn } from "../../hooks/user/useSignIn";
+import { useConfirm } from "../../hooks/user/useConfirm";
 
 const TOKEN = "confirmation_token";
 
-type SignInProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
+type SignInProps = ReturnType<typeof mapState>;
 
-const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn, confirm }) => {
+const SignInPage: FC<SignInProps> = ({ isAuthenticated }) => {
   const { search } = useLocation();
   const token = new URLSearchParams(search).get(TOKEN);
+  const { mutate: signIn } = useSignIn();
+  const { mutate: confirm } = useConfirm();
 
   useEffect(() => {
     if (!token) return;
-    confirm({ token });
+
+    confirm(token);
   }, []);
 
   const formik = useFormik({
@@ -55,14 +60,14 @@ const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn, confirm }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
-      <div className="max-w-md w-full mx-auto">
-        <div className="text-center font-medium text-xl">Sign In Page</div>
+    <div className="flex flex-col justify-center min-h-screen bg-gray-50">
+      <div className="w-full max-w-md mx-auto">
+        <div className="text-xl font-medium text-center">Sign In Page</div>
       </div>
-      <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-md">
+      <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300 rounded-md">
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="" className="text-sm font-bold text-gray-600 block">
+            <label htmlFor="" className="block text-sm font-bold text-gray-600">
               Username
             </label>
             <input
@@ -72,14 +77,14 @@ const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn, confirm }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="text"
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-2 mt-1 border border-gray-300 rounded"
             />
             {formik.touched.username && formik.errors.username ? (
               <p className="text-red-500">{formik.errors.username}</p>
             ) : null}
           </div>
           <div>
-            <label htmlFor="" className="text-sm font-bold text-gray-600 block">
+            <label htmlFor="" className="block text-sm font-bold text-gray-600">
               Password
             </label>
             <input
@@ -89,7 +94,7 @@ const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn, confirm }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="password"
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-2 mt-1 border border-gray-300 rounded"
               autoComplete="on"
             />
             {formik.touched.password && formik.errors.password ? (
@@ -103,15 +108,15 @@ const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn, confirm }) => {
             >
               Sign In
             </button>
-            <div className="mt-5 flex justify-between">
+            <div className="flex justify-between mt-5">
               <Link
-                className="font-small text-blue-400 dark:text-blue-500 hover:underline"
+                className="text-blue-400 font-small dark:text-blue-500 hover:underline"
                 to={SIGN_UP_ROUTE}
               >
                 Don't have an account?
               </Link>
               <Link
-                className="font-small text-blue-400 dark:text-blue-500 hover:underline"
+                className="text-blue-400 font-small dark:text-blue-500 hover:underline"
                 to={FORGOT_PASSWORD_ROUTE}
               >
                 Forgot password?
@@ -128,9 +133,4 @@ const mapState = (state: RootState) => ({
   isAuthenticated: state.user?.isAuthenticated,
 });
 
-const mapDispatch = (dispatch: Dispatch) => ({
-  signIn: dispatch.user.signIn,
-  confirm: dispatch.user.confirm,
-});
-
-export default connect(mapState, mapDispatch)(SignInPage);
+export default connect(mapState)(SignInPage);

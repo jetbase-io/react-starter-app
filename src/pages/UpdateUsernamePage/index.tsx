@@ -5,49 +5,54 @@ import { Navigate, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import { Dispatch, RootState } from "../../store/store";
+import { useUpdateUsername } from "../../hooks/user/useUpdateUsername";
 
-type ProfileProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
+type ProfileProps = ReturnType<typeof mapState>;
 
-const UpdateUsernamePage: FC<ProfileProps> = ({ isAuthenticated, updateUsername }) => {
+const UpdateUsernamePage: FC<ProfileProps> = ({ isAuthenticated }) => {
   if (!isAuthenticated) {
     return <Navigate to="/" />;
   }
+
+  const { mutate: updateUsername } = useUpdateUsername();
 
   const formik = useFormik({
     initialValues: {
       username: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().min(6, "Minimum 6 characters required").required("Required"),
+      username: Yup.string()
+        .min(6, "Minimum 6 characters required")
+        .required("Required"),
     }),
     onSubmit: (values) => {
-      updateUsername({
-        username: values.username,
-      });
+      updateUsername(values.username);
     },
   });
 
   return (
-    <div className="min-h-screen flex flex-col justify-center">
-      <div className="max-w-md w-full mx-auto">
-        <div className="text-center font-medium text-xl">Update Username</div>
+    <div className="flex flex-col justify-center min-h-screen">
+      <div className="w-full max-w-md mx-auto">
+        <div className="text-xl font-medium text-center">Update Username</div>
       </div>
-      <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
+      <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300">
         <form onSubmit={formik.handleSubmit} className="space-y-6">
-          <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg">
+          <div className="max-w-md mx-auto overflow-hidden bg-white rounded-lg md:max-w-lg">
             <div className="md:flex">
               <div className="w-full">
                 <div className="mb-1">
-                  <label className="text-sm font-bold text-gray-600 block">New username</label>
+                  <label className="block text-sm font-bold text-gray-600">
+                    New username
+                  </label>
                   <input
                     type="text"
-                    className="h-12 px-3 w-full border-blue-400 border-2 rounded focus:outline-none focus:border-blue-600"
+                    className="w-full h-12 px-3 border-2 border-blue-400 rounded focus:outline-none focus:border-blue-600"
                     name="username"
                     value={formik.values.username}
                     onChange={formik.handleChange}
                   />
                   {formik.errors.username && (
-                    <p className="text-center text-sm font-bold text-red-600 block mt-2 mb-2">
+                    <p className="block mt-2 mb-2 text-sm font-bold text-center text-red-600">
                       {formik.errors.username}
                     </p>
                   )}
@@ -55,11 +60,14 @@ const UpdateUsernamePage: FC<ProfileProps> = ({ isAuthenticated, updateUsername 
                 <div className="mt-3 text-right">
                   <a
                     href="/"
-                    className="ml-2 h-10 w-32 rounded px-3 py-1 hover:bg-gray-300 focus:shadow-outline focus:outline-none0"
+                    className="w-32 h-10 px-3 py-1 ml-2 rounded hover:bg-gray-300 focus:shadow-outline focus:outline-none0"
                   >
                     Cancel
                   </a>
-                  <button type="submit" className="ml-2 h-10 w-32 bg-blue-600 rounded text-white hover:bg-blue-700">
+                  <button
+                    type="submit"
+                    className="w-32 h-10 ml-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+                  >
                     Update
                   </button>
                 </div>
@@ -76,8 +84,4 @@ const mapState = (state: RootState) => ({
   isAuthenticated: state.user?.isAuthenticated,
 });
 
-const mapDispatch = (dispatch: Dispatch) => ({
-  updateUsername: dispatch.user.updateUsername,
-});
-
-export default connect(mapState, mapDispatch)(UpdateUsernamePage);
+export default connect(mapState)(UpdateUsernamePage);
