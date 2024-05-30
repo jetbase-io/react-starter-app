@@ -1,17 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import User from "../../services/api/User";
 import { toast } from "react-toastify";
-import { useTypedDispatch } from "../useTypedDispatch";
+import { useUserStore } from "../../store/useUserStore";
 
 export const useSignUp = () => {
-  const dispatch = useTypedDispatch();
+  const setIsSignedUp = useUserStore((state) => state.setIsSignedUp);
 
   const { isPending, mutate } = useMutation({
     mutationFn: User.signUp,
     onSuccess: (message) => {
       toast.success(message);
 
-      dispatch.user.setIsSignedUp(true);
+      setIsSignedUp(true);
     },
     onError: ({ message }) => {
       toast.error(message?.toString());

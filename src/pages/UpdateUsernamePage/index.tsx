@@ -1,15 +1,14 @@
 import { useFormik } from "formik";
-import React, { FC } from "react";
-import { connect } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+
+import { Navigate } from "react-router-dom";
 import * as Yup from "yup";
 
-import { Dispatch, RootState } from "../../store/store";
 import { useUpdateUsername } from "../../hooks/user/useUpdateUsername";
+import { useUserStore } from "../../store/useUserStore";
 
-type ProfileProps = ReturnType<typeof mapState>;
+const UpdateUsernamePage = () => {
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
 
-const UpdateUsernamePage: FC<ProfileProps> = ({ isAuthenticated }) => {
   if (!isAuthenticated) {
     return <Navigate to="/" />;
   }
@@ -80,8 +79,4 @@ const UpdateUsernamePage: FC<ProfileProps> = ({ isAuthenticated }) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-});
-
-export default connect(mapState)(UpdateUsernamePage);
+export default UpdateUsernamePage;

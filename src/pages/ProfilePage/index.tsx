@@ -1,22 +1,20 @@
-import { FC } from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import { parseJwt } from "../../helpers/user";
+import { getAccessToken, parseJwt } from "../../helpers/user";
 import {
   PROFILE_ROUTE_UPDATE_USERNAME,
   PROFILE_ROUTE_UPDATE_USER_AVATAR,
   RESET_PASSWORD_ROUTE,
 } from "../../store/constants/route-constants";
 
-import { RootState } from "../../store/store";
 import { useFullSignOut } from "../../hooks/user/useFullSignOut";
 import { useUser } from "../../hooks/user/useUser";
+import { useUserStore } from "../../store/useUserStore";
 
-type ProfileProps = ReturnType<typeof mapState>;
-
-const ProfilePage: FC<ProfileProps> = ({ isAuthenticated, userToken }) => {
+const ProfilePage = () => {
   const { mutate: fullSignOut } = useFullSignOut();
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const userToken = parseJwt(getAccessToken() || "");
 
   if (!isAuthenticated) {
     return <Navigate to="/" />;
@@ -82,9 +80,4 @@ const ProfilePage: FC<ProfileProps> = ({ isAuthenticated, userToken }) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-  userToken: parseJwt(state.user.accessToken),
-});
-
-export default connect(mapState)(ProfilePage);
+export default ProfilePage;

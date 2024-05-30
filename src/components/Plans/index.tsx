@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { useDispatch } from "react-redux";
+
 import { useNavigate } from "react-router-dom";
 
 import { BILLING_ROUTE } from "../../store/constants/route-constants";
-import { Dispatch } from "../../store/store";
+import { usePlanStore } from "../../store/usePlanStore";
 
 interface IPlansProp {
   plans: [];
@@ -12,10 +12,10 @@ interface IPlansProp {
 
 const Plans: FC<IPlansProp> = ({ plans, chosenPlan }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<Dispatch>();
+  const setChosenPlan = usePlanStore((state) => state.setChosenPlan);
 
   const handleSubscribe = (title: string, id: string) => {
-    dispatch.plan.setChosenPlan({ plans, planId: id });
+    setChosenPlan(id, plans);
     navigate(BILLING_ROUTE);
   };
 

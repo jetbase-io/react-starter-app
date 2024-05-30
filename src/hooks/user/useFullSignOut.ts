@@ -1,14 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import { useTypedDispatch } from "../useTypedDispatch";
+
 import User from "../../services/api/User";
+import { useUserStore } from "../../store/useUserStore";
 
 export const useFullSignOut = () => {
-  const dispatch = useTypedDispatch();
+  const logOutUser = useUserStore((state) => state.logOutUser);
 
   const { isPending, mutate } = useMutation({
     mutationFn: User.fullSignOut,
     onSuccess: () => {
-      dispatch.user.logOutUser();
+      logOutUser();
     },
   });
 

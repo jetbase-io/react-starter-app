@@ -2,24 +2,24 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import classNames from "classnames";
 import { useFormik } from "formik";
 import { FC } from "react";
-import { useSelector } from "react-redux";
+
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 import { getChosenPlan } from "../../helpers/plan";
 import { HOME_ROUTE } from "../../store/constants/route-constants";
-import { RootState } from "../../store/store";
+
 import { useGetPaymentMethods } from "../../hooks/user/useGetPaymentMethods";
 import { useDetachPaymentMethod } from "../../hooks/user/useDetachPaymentMethod";
 import { useActivateSubscription } from "../../hooks/user/useActivateSubscription";
-import { useTypedDispatch } from "../../hooks/useTypedDispatch";
+
+import { useUserStore } from "../../store/useUserStore";
 
 const BillingPage: FC = () => {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated
-  );
-  const dispatch = useTypedDispatch();
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const setSubscription = useUserStore((state) => state.setSubscription);
+
   const { mutate: activateSubscription } = useActivateSubscription();
   const navigate = useNavigate();
 
@@ -50,12 +50,12 @@ const BillingPage: FC = () => {
           if (res.error) {
             toast.error("Payment failed");
           } else {
-            dispatch.user.setSubscription({ status: "active", nickname });
+            setSubscription({ status: "active", nickname: nickname || "" });
             toast.success("Payment was successfully applied!");
           }
         });
       } else {
-        dispatch.user.setSubscription({ status: "active", nickname });
+        setSubscription({ status: "active", nickname: nickname || "" });
         toast.success("Payment was successfully applied!");
       }
     }

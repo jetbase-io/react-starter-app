@@ -1,17 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
-import { useTypedDispatch } from "../useTypedDispatch";
+
 import User from "../../services/api/User";
 import { toast } from "react-toastify";
+import { useUserStore } from "../../store/useUserStore";
 
 export const useResetPassword = () => {
-  const dispatch = useTypedDispatch();
+  const logOutUser = useUserStore((state) => state.logOutUser);
 
   const { isPending, mutate } = useMutation({
     mutationFn: User.resetPassword,
     onSuccess: async () => {
       toast.success("Password updated!");
 
-      dispatch.user.logOutUser();
+      logOutUser();
     },
     onError: ({ message }) => {
       toast.error(message);

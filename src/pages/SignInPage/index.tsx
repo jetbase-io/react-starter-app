@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useFormik } from "formik";
 import { FC, useEffect } from "react";
-import { connect } from "react-redux";
+
 import { Link, Navigate, useLocation } from "react-router-dom";
 import * as Yup from "yup";
 
@@ -9,16 +9,16 @@ import {
   FORGOT_PASSWORD_ROUTE,
   SIGN_UP_ROUTE,
 } from "../../store/constants/route-constants";
-import { RootState } from "../../store/store";
+
 import { useSignIn } from "../../hooks/user/useSignIn";
 import { useConfirm } from "../../hooks/user/useConfirm";
+import { useUserStore } from "../../store/useUserStore";
 
 const TOKEN = "confirmation_token";
 
-type SignInProps = ReturnType<typeof mapState>;
-
-const SignInPage: FC<SignInProps> = ({ isAuthenticated }) => {
+const SignInPage = () => {
   const { search } = useLocation();
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
   const token = new URLSearchParams(search).get(TOKEN);
   const { mutate: signIn } = useSignIn();
   const { mutate: confirm } = useConfirm();
@@ -129,8 +129,4 @@ const SignInPage: FC<SignInProps> = ({ isAuthenticated }) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-});
-
-export default connect(mapState)(SignInPage);
+export default SignInPage;

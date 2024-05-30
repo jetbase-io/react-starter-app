@@ -1,20 +1,20 @@
 import classNames from "classnames";
 import { useFormik } from "formik";
-import React, { FC } from "react";
-import { connect } from "react-redux";
+
 import { Navigate, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
-import { RootState } from "../../store/store";
+
 import { useResetPassword } from "../../hooks/user/useResetPassword";
+import { useUserStore } from "../../store/useUserStore";
 
 type IPasswordValues = Record<string, string>;
 
-type ResetPasswordProps = ReturnType<typeof mapState>;
-const ResetPasswordPage: FC<ResetPasswordProps> = ({ isAuthenticated }) => {
+const ResetPasswordPage = () => {
   const navigate = useNavigate();
   const { mutate: resetPassword } = useResetPassword();
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
 
   const passwordValues: IPasswordValues = {
     oldPassword: "",
@@ -106,8 +106,4 @@ const ResetPasswordPage: FC<ResetPasswordProps> = ({ isAuthenticated }) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-});
-
-export default connect(mapState)(ResetPasswordPage);
+export default ResetPasswordPage;

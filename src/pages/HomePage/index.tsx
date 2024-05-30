@@ -1,14 +1,14 @@
 import { FC, useEffect } from "react";
-import { useSelector } from "react-redux";
+
 import { useNavigate } from "react-router";
 
 import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
-import { RootState } from "../../store/store";
 
-const HomePage: FC = () => {
+import { useUserStore } from "../../store/useUserStore";
+
+const HomePage = () => {
   const navigate = useNavigate();
-  const userState = useSelector((state: RootState) => state.user);
-  const { isAuthenticated } = userState;
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
 
   useEffect(() => {
     if (!isAuthenticated) {

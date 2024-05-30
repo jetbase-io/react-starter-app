@@ -1,17 +1,17 @@
 import { FC } from "react";
-import { connect } from "react-redux";
 
 import SignUpForm from "./SignUpForm";
 import Placeholder from "./Placeholder";
-import { RootState } from "../../store/store";
+
 import { Navigate, useNavigate } from "react-router";
 import { useSignUp } from "../../hooks/user/useSignUp";
+import { useUserStore } from "../../store/useUserStore";
 
-type SignUpProps = ReturnType<typeof mapState>;
-
-const SignUpPage: FC<SignUpProps> = ({ isSignedUp, isAuthenticated }) => {
+const SignUpPage: FC = () => {
   const navigate = useNavigate();
   const { mutate: signUp } = useSignUp();
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const isSignedUp = useUserStore((state) => state.isSignedUp);
 
   const handleClick = () => {
     return navigate("/");
@@ -44,9 +44,4 @@ const SignUpPage: FC<SignUpProps> = ({ isSignedUp, isAuthenticated }) => {
   );
 };
 
-const mapState = (state: RootState) => ({
-  isSignedUp: state.user?.isSignedUp,
-  isAuthenticated: state.user?.isAuthenticated,
-});
-
-export default connect(mapState)(SignUpPage);
+export default SignUpPage;
