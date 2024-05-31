@@ -2,9 +2,10 @@ import type { FC } from 'react'
 
 import classNames from 'classnames'
 import { useFormik } from 'formik'
-
+import { connect } from 'react-redux'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
+
 import type { RootState } from '../../store/store'
 
 import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
@@ -91,4 +92,4 @@ const mapState = (state: RootState) => ({
   isAuthenticated: state.user?.isAuthenticated,
 })
 
-export default ForgotPasswordPage
+export default connect(mapState)(ForgotPasswordPage)
