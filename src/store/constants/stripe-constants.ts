@@ -1,1 +1,1 @@
-export const STRIPE_INACTIVE_STATUS = "inactive";
+export const STRIPE_INACTIVE_STATUS = 'inactive'

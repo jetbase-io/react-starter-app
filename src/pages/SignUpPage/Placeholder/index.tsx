@@ -1,10 +1,10 @@
-import { FC } from "react";
+import type { FC } from 'react'
 
 interface IProps {
-  title: string;
-  message: string;
-  btnTitle: string;
-  onClick: () => void;
+  title: string
+  message: string
+  btnTitle: string
+  onClick: () => void
 }
 
 const Placeholder: FC<IProps> = ({ title, message, btnTitle, onClick }) => {
@@ -20,7 +20,7 @@ const Placeholder: FC<IProps> = ({ title, message, btnTitle, onClick }) => {
         {btnTitle}
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default Placeholder;
+export default Placeholder

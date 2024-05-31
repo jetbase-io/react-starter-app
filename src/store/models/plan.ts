@@ -1,18 +1,18 @@
-import { createModel } from "@rematch/core";
+import { createModel } from '@rematch/core'
+import type { RootModel } from './index'
 
-import { setChosenPlan } from "../../helpers/plan";
-import { GET_PLANS_URL } from "../constants/api-contstants";
-import http from "../http/http-common";
-import type { RootModel } from "./index";
+import { setChosenPlan } from '../../helpers/plan'
+import { GET_PLANS_URL } from '../constants/api-contstants'
+import http from '../http/http-common'
 
 type PlanState = {
-  plans: [];
+  plans: []
   chosenPlan: {
-    id: string;
-    nickname?: string;
-    amount: number;
-  };
-};
+    id: string
+    nickname?: string
+    amount: number
+  }
+}
 
 export const plan = createModel<RootModel>()({
   state: {
@@ -24,28 +24,29 @@ export const plan = createModel<RootModel>()({
       return {
         ...state,
         plans,
-      } as PlanState;
+      } as PlanState
     },
     setChosenPlan(state, planId: string) {
-      const chosenPlan = state.plans.find(({ id }) => id === planId);
-      setChosenPlan(chosenPlan || {});
+      const chosenPlan = state.plans.find(({ id }) => id === planId)
+      setChosenPlan(chosenPlan || {})
+
       return {
         ...state,
         chosenPlan,
-      } as unknown as PlanState;
+      } as unknown as PlanState
     },
   },
-  effects: (dispatch) => {
+  effects: dispatch => {
     return {
       async getPlans() {
-        const response = await http(GET_PLANS_URL);
+        const response = await http(GET_PLANS_URL)
 
-        dispatch.plan.setPlans(response.data);
+        dispatch.plan.setPlans(response.data)
       },
 
       async choosePlan(planId: string) {
-        dispatch.plan.setChosenPlan(planId);
+        dispatch.plan.setChosenPlan(planId)
       },
-    };
+    }
   },
-});
+})
