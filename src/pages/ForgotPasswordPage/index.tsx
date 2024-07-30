@@ -1,25 +1,25 @@
 import classNames from "classnames";
 import { useFormik } from "formik";
-import React, { FC } from "react";
-import { connect } from "react-redux";
+
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
-import { Dispatch, RootState } from "../../store/store";
+import { useUserStore } from "../../store/useUserStore";
 
-type IPasswordValues = Record<string, string>;
-
-type ForgotPasswordProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>;
-const ForgotPasswordPage: FC<ForgotPasswordProps> = ({ isAuthenticated, resetPassword }) => {
+const ForgotPasswordPage = () => {
   const navigate = useNavigate();
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
 
   const formik = useFormik({
     initialValues: {
       email: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email format").min(6, "Minimum 6 characters required").required("Required"),
+      email: Yup.string()
+        .email("Invalid email format")
+        .min(6, "Minimum 6 characters required")
+        .required("Required"),
     }),
     onSubmit: (values) => {
       // ForgotPasswordPage():
@@ -37,14 +37,17 @@ const ForgotPasswordPage: FC<ForgotPasswordProps> = ({ isAuthenticated, resetPas
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center">
-      <div className="max-w-md w-full mx-auto">
-        <div className="text-center font-medium text-xl">Forgot Password</div>
+    <div className="flex flex-col justify-center min-h-screen">
+      <div className="w-full max-w-md mx-auto">
+        <div className="text-xl font-medium text-center">Forgot Password</div>
       </div>
-      <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-md">
+      <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300 rounded-md">
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="text-sm font-bold text-gray-600 block">
+            <label
+              htmlFor="email"
+              className="block text-sm font-bold text-gray-600"
+            >
               Email
             </label>
             <input
@@ -54,16 +57,24 @@ const ForgotPasswordPage: FC<ForgotPasswordProps> = ({ isAuthenticated, resetPas
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               type="password"
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-2 mt-1 border border-gray-300 rounded"
             />
-            {formik.touched.email && formik.errors.email && <p className="text-red-500">{formik.errors.email}</p>}
+            {formik.touched.email && formik.errors.email && (
+              <p className="text-red-500">{formik.errors.email}</p>
+            )}
           </div>
           <div>
-            <button type="submit" className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}>
+            <button
+              type="submit"
+              className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}
+            >
               Send
             </button>
-            <div className="mt-5 flex justify-center">
-              <Link className="font-small text-blue-400 dark:text-blue-500 hover:underline" to={SIGN_IN_ROUTE}>
+            <div className="flex justify-center mt-5">
+              <Link
+                className="text-blue-400 font-small dark:text-blue-500 hover:underline"
+                to={SIGN_IN_ROUTE}
+              >
                 Already have an account?
               </Link>
             </div>
@@ -74,12 +85,4 @@ const ForgotPasswordPage: FC<ForgotPasswordProps> = ({ isAuthenticated, resetPas
   );
 };
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-});
-
-const mapDispatch = (dispatch: Dispatch) => ({
-  resetPassword: dispatch.user.resetPassword,
-});
-
-export default connect(mapState, mapDispatch)(ForgotPasswordPage);
+export default ForgotPasswordPage;
