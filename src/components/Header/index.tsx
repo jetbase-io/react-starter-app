@@ -1,24 +1,26 @@
-import type { FC } from 'react'
-
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import React, { FC, useState } from 'react'
+
 import { Link } from 'react-router-dom'
-import type { Dispatch, RootState } from '../../store/store'
 
 import {
   CONTACT_US_ROUTE,
   PLANS_ROUTE,
   PROFILE_ROUTE,
+  RESET_PASSWORD_ROUTE,
+  SIGN_IN_ROUTE,
+  SIGN_UP_ROUTE,
 } from '../../store/constants/route-constants'
+
 import HeaderLink from '../HeaderLink'
+import { useSignOut } from '../../hooks/user/useSignOut'
+import { useUserStore } from '../../store/useUserStore'
 
-type HeaderPageProps = ReturnType<typeof mapState> &
-  ReturnType<typeof mapDispatch>
-
-const Header: FC<HeaderPageProps> = ({ isAuthenticated, signOut }) => {
+const Header = () => {
   const [openBurger, setOpenBurger] = useState(false)
+  const { mutate: signOut } = useSignOut()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   const handleSignOutClick: React.MouseEventHandler<HTMLButtonElement> = () => {
     signOut()
@@ -126,16 +128,4 @@ const Header: FC<HeaderPageProps> = ({ isAuthenticated, signOut }) => {
   )
 }
 
-Header.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
-}
-
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user.isAuthenticated,
-})
-
-const mapDispatch = (dispatch: Dispatch) => ({
-  signOut: dispatch.user.signOut,
-})
-
-export default connect(mapState, mapDispatch)(Header)
+export default Header

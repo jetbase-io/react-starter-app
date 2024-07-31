@@ -1,18 +1,15 @@
-import type { FC } from 'react'
-
 import classNames from 'classnames'
 import { useFormik } from 'formik'
-import { connect } from 'react-redux'
+
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
-import type { RootState } from '../../store/store'
-
 import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
+import { useUserStore } from '../../store/useUserStore'
 
-type ForgotPasswordProps = ReturnType<typeof mapState>
-const ForgotPasswordPage: FC<ForgotPasswordProps> = ({ isAuthenticated }) => {
+const ForgotPasswordPage = () => {
   const navigate = useNavigate()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   const formik = useFormik({
     initialValues: {
@@ -88,8 +85,4 @@ const ForgotPasswordPage: FC<ForgotPasswordProps> = ({ isAuthenticated }) => {
   )
 }
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-})
-
-export default connect(mapState)(ForgotPasswordPage)
+export default ForgotPasswordPage

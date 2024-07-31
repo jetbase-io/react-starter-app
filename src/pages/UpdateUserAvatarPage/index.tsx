@@ -1,18 +1,17 @@
-import type { FC } from 'react'
-
 import { useFormik } from 'formik'
 import { useState } from 'react'
-import { connect } from 'react-redux'
+
 import { Navigate } from 'react-router-dom'
 import * as Yup from 'yup'
-import type { Dispatch, RootState } from '../../store/store'
 
-type ProfileProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>
-const UpdateUserAvatarPage: FC<ProfileProps> = ({
-  isAuthenticated,
-  updateUserAvatar,
-}) => {
+import { useUpdateUserAvatar } from '../../hooks/user/useUpdateUserAvatar'
+import { useUserStore } from '../../store/useUserStore'
+
+const UpdateUserAvatarPage = () => {
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+
   const [preview, setPreview] = useState<string>('')
+  const { mutate: updateUserAvatar } = useUpdateUserAvatar()
 
   const formik = useFormik({
     initialValues: {
@@ -34,9 +33,7 @@ const UpdateUserAvatarPage: FC<ProfileProps> = ({
         ),
     }),
     onSubmit: values => {
-      updateUserAvatar({
-        avatar: values.image,
-      })
+      updateUserAvatar(values.image as unknown as File)
     },
   })
 
@@ -121,12 +118,4 @@ const UpdateUserAvatarPage: FC<ProfileProps> = ({
   )
 }
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-})
-
-const mapDispatch = (dispatch: Dispatch) => ({
-  updateUserAvatar: dispatch.user.updateUserAvatar,
-})
-
-export default connect(mapState, mapDispatch)(UpdateUserAvatarPage)
+export default UpdateUserAvatarPage

@@ -43,7 +43,7 @@ http.interceptors.response.use(
       refresh = true
       try {
         const response = await axios.post(
-          `${baseURL}/${REFRESH_TOKEN_URL}`,
+          `${baseURL}${REFRESH_TOKEN_URL}`,
           {},
           {
             headers: {

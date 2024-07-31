@@ -1,24 +1,20 @@
-import type { FC } from 'react'
-
 import classNames from 'classnames'
 import { useFormik } from 'formik'
-import React from 'react'
-import { connect } from 'react-redux'
+
 import { Navigate, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
-import type { Dispatch, RootState } from '../../store/store'
 
 import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
 
+import { useResetPassword } from '../../hooks/user/useResetPassword'
+import { useUserStore } from '../../store/useUserStore'
+
 type IPasswordValues = Record<string, string>
 
-type ResetPasswordProps = ReturnType<typeof mapState> &
-  ReturnType<typeof mapDispatch>
-const ResetPasswordPage: FC<ResetPasswordProps> = ({
-  isAuthenticated,
-  resetPassword,
-}) => {
+const ResetPasswordPage = () => {
   const navigate = useNavigate()
+  const { mutate: resetPassword } = useResetPassword()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   const passwordValues: IPasswordValues = {
     oldPassword: '',
@@ -66,17 +62,17 @@ const ResetPasswordPage: FC<ResetPasswordProps> = ({
   ]
 
   return (
-    <div className="min-h-screen flex flex-col justify-center">
-      <div className="max-w-md w-full mx-auto">
-        <div className="text-center font-medium text-xl">Reset Password</div>
+    <div className="flex flex-col justify-center min-h-screen">
+      <div className="w-full max-w-md mx-auto">
+        <div className="text-xl font-medium text-center">Reset Password</div>
       </div>
-      <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-md">
+      <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300 rounded-md">
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           {inputs.map(input => (
             <div key={input.id}>
               <label
                 htmlFor={input.name}
-                className="text-sm font-bold text-gray-600 block"
+                className="block text-sm font-bold text-gray-600"
               >
                 {input.label}
               </label>
@@ -86,7 +82,7 @@ const ResetPasswordPage: FC<ResetPasswordProps> = ({
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 type="password"
-                className="w-full p-2 border border-gray-300 rounded mt-1"
+                className="w-full p-2 mt-1 border border-gray-300 rounded"
               />
               {formik.touched[`${input.name}`] &&
                 formik.errors[`${input.name}`] && (
@@ -110,12 +106,4 @@ const ResetPasswordPage: FC<ResetPasswordProps> = ({
   )
 }
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-})
-
-const mapDispatch = (dispatch: Dispatch) => ({
-  resetPassword: dispatch.user.resetPassword,
-})
-
-export default connect(mapState, mapDispatch)(ResetPasswordPage)
+export default ResetPasswordPage

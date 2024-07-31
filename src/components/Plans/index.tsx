@@ -1,23 +1,21 @@
 import type { FC } from 'react'
 
-import React from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import type { Dispatch } from '../../store/store'
 
 import { BILLING_ROUTE } from '../../store/constants/route-constants'
+import { usePlanStore } from '../../store/usePlanStore'
 
 interface IPlansProp {
-  plans: any[]
+  plans: []
   chosenPlan: any
 }
 
 const Plans: FC<IPlansProp> = ({ plans, chosenPlan }) => {
   const navigate = useNavigate()
-  const dispatch = useDispatch<Dispatch>()
+  const setChosenPlan = usePlanStore(state => state.setChosenPlan)
 
   const handleSubscribe = (title: string, id: string) => {
-    dispatch.plan.setChosenPlan(id)
+    setChosenPlan(id, plans)
     navigate(BILLING_ROUTE)
   }
 

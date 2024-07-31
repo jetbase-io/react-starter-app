@@ -1,30 +1,32 @@
-import type { FC } from 'react'
-
 import classNames from 'classnames'
 import { useFormik } from 'formik'
-import { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { FC, useEffect } from 'react'
+
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import * as Yup from 'yup'
-import type { Dispatch, RootState } from '../../store/store'
 
 import {
   FORGOT_PASSWORD_ROUTE,
   SIGN_UP_ROUTE,
 } from '../../store/constants/route-constants'
 
+import { useSignIn } from '../../hooks/user/useSignIn'
+import { useConfirm } from '../../hooks/user/useConfirm'
+import { useUserStore } from '../../store/useUserStore'
+
 const TOKEN = 'confirmation_token'
 
-type SignInProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>
-
-const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn, confirm }) => {
+const SignInPage = () => {
   const { search } = useLocation()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
   const token = new URLSearchParams(search).get(TOKEN)
+  const { mutate: signIn } = useSignIn()
+  const { mutate: confirm } = useConfirm()
 
   useEffect(() => {
     if (!token) return
 
-    confirm({ token })
+    confirm(token)
   }, [confirm, token])
 
   const formik = useFormik({
@@ -127,13 +129,4 @@ const SignInPage: FC<SignInProps> = ({ isAuthenticated, signIn, confirm }) => {
   )
 }
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-})
-
-const mapDispatch = (dispatch: Dispatch) => ({
-  signIn: dispatch.user.signIn,
-  confirm: dispatch.user.confirm,
-})
-
-export default connect(mapState, mapDispatch)(SignInPage)
+export default SignInPage

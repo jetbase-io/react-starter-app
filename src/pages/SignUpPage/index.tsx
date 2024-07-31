@@ -1,20 +1,17 @@
 import type { FC } from 'react'
 
-import { connect } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router'
-import type { Dispatch, RootState } from '../../store/store'
-
-import Placeholder from './Placeholder'
 import SignUpForm from './SignUpForm'
+import Placeholder from './Placeholder'
 
-type SignUpProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>
+import { useSignUp } from '../../hooks/user/useSignUp'
+import { useUserStore } from '../../store/useUserStore'
 
-const SignUpPage: FC<SignUpProps> = ({
-  isSignedUp,
-  isAuthenticated,
-  signUp,
-}) => {
+const SignUpPage: FC = () => {
   const navigate = useNavigate()
+  const { mutate: signUp } = useSignUp()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+  const isSignedUp = useUserStore(state => state.isSignedUp)
 
   const handleClick = () => {
     return navigate('/')
@@ -25,11 +22,11 @@ const SignUpPage: FC<SignUpProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center">
+    <div className="flex flex-col justify-center min-h-screen bg-gray-50">
       {!isSignedUp ? (
         <>
-          <div className="max-w-md w-full mx-auto">
-            <div className="text-center font-medium text-xl">Sign Up Page</div>
+          <div className="w-full max-w-md mx-auto">
+            <div className="text-xl font-medium text-center">Sign Up Page</div>
           </div>
           <SignUpForm handleSignUp={signUp} />
         </>
@@ -45,13 +42,4 @@ const SignUpPage: FC<SignUpProps> = ({
   )
 }
 
-const mapState = (state: RootState) => ({
-  isSignedUp: state.user?.isSignedUp,
-  isAuthenticated: state.user?.isAuthenticated,
-})
-
-const mapDispatch = (dispatch: Dispatch) => ({
-  signUp: dispatch.user.signUp,
-})
-
-export default connect(mapState, mapDispatch)(SignUpPage)
+export default SignUpPage

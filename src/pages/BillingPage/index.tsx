@@ -1,26 +1,34 @@
-import type { FC } from 'react'
-
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import classNames from 'classnames'
 import { useFormik } from 'formik'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import type { FC } from 'react'
+
 import { Navigate, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as Yup from 'yup'
-import type { Dispatch, RootState } from '../../store/store'
 
 import { getChosenPlan } from '../../helpers/plan'
 import { HOME_ROUTE } from '../../store/constants/route-constants'
 
+import { useGetPaymentMethods } from '../../hooks/user/useGetPaymentMethods'
+import { useDetachPaymentMethod } from '../../hooks/user/useDetachPaymentMethod'
+import { useActivateSubscription } from '../../hooks/user/useActivateSubscription'
+
+import { useUserStore } from '../../store/useUserStore'
+
 const BillingPage: FC = () => {
-  const dispatch = useDispatch<Dispatch>()
-  const userState = useSelector((state: RootState) => state.user)
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+  const setSubscription = useUserStore(state => state.setSubscription)
+
+  const { mutate: activateSubscription } = useActivateSubscription()
   const navigate = useNavigate()
 
   const stripe = useStripe()
   const elements = useElements()
   const chosenPlan = getChosenPlan()
+
+  const { paymentMethods } = useGetPaymentMethods()
+  const { mutate: detachPaymentMethod } = useDetachPaymentMethod()
 
   const handleResultData = (resultData: {
     clientSecret: string
@@ -39,16 +47,17 @@ const BillingPage: FC = () => {
           if (res.error) {
             toast.error('Payment failed')
           } else {
-            dispatch.user.setSubscription({ status: 'active', nickname })
+            setSubscription({ status: 'active', nickname: nickname || '' })
             toast.success('Payment was successfully applied!')
           }
         })
       } else {
-        dispatch.user.setSubscription({ status: 'active', nickname })
+        setSubscription({ status: 'active', nickname: nickname || '' })
         toast.success('Payment was successfully applied!')
       }
     }
   }
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -71,23 +80,20 @@ const BillingPage: FC = () => {
         },
       })
       const args = {
-        email: values.email,
         priceId: chosenPlan.id,
         paymentMethodId: result.paymentMethod?.id,
       }
-      const resultData = await dispatch.user.activateSubscription(args)
-      handleResultData(resultData)
-      navigate(HOME_ROUTE)
+
+      activateSubscription(args, {
+        onSuccess(data) {
+          handleResultData(data)
+          navigate(HOME_ROUTE)
+        },
+      })
     },
   })
 
-  useEffect(() => {
-    if (userState.paymentMethods.length === 0) {
-      dispatch.user.getPaymentMethods()
-    }
-  }, [dispatch.user, userState.paymentMethods.length])
-
-  if (!userState.isAuthenticated) {
+  if (!isAuthenticated) {
     return <Navigate to="/" />
   }
 
@@ -100,16 +106,22 @@ const BillingPage: FC = () => {
     paymentMethodId: string,
     priceId: string,
   ) => {
-    const result = await dispatch.user.activateSubscription({
-      paymentMethodId,
-      priceId,
-    })
-    handleResultData(result)
-    navigate(HOME_ROUTE)
+    activateSubscription(
+      {
+        paymentMethodId,
+        priceId,
+      },
+      {
+        onSuccess(data) {
+          handleResultData(data)
+          navigate(HOME_ROUTE)
+        },
+      },
+    )
   }
 
   const onDetachCardClick = (paymentMethodId: string) => {
-    dispatch.user.detachPaymentMethod(paymentMethodId)
+    detachPaymentMethod({ paymentMethods, paymentMethodId })
     navigate(HOME_ROUTE)
   }
 
@@ -169,7 +181,7 @@ const BillingPage: FC = () => {
           </form>
         </div>
         <div className="w-full max-w-md mx-auto ">
-          {userState.paymentMethods?.map(({ id, card }) => (
+          {paymentMethods?.map(({ id, card }) => (
             <div
               key={id}
               className="flex mb-0.5 border border-r-2 lg:px-4 py-1 text-center text-primary-dark bg-primary-white"
@@ -182,14 +194,12 @@ const BillingPage: FC = () => {
               />
               <p className="w-1/2 pr-1 text-right">
                 <button
-                  type="button"
                   onClick={() => onDetachCardClick(id)}
                   className="px-4 py-2 mr-1 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-600"
                 >
                   Detach
                 </button>
                 <button
-                  type="button"
                   onClick={() => onExistedCardClick(id, chosenPlan.id)}
                   className="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-600"
                 >

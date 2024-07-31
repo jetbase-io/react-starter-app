@@ -1,25 +1,20 @@
-import type { FC } from 'react'
+import { useEffect } from 'react'
 
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
-import type { Dispatch, RootState } from '../../store/store'
 
 import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
 
-const HomePage: FC = () => {
+import { useUserStore } from '../../store/useUserStore'
+
+const HomePage = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch<Dispatch>()
-  const userState = useSelector((state: RootState) => state.user)
-  const { isAuthenticated } = userState
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch.user.checkSubscription()
-    } else {
+    if (!isAuthenticated) {
       navigate(SIGN_IN_ROUTE)
     }
-  }, [dispatch.user, isAuthenticated, navigate])
+  }, [isAuthenticated, navigate])
 
   return (
     <div className="pb-10 mx-auto mt-10 rounded-lg shadow-xl">

@@ -1,31 +1,20 @@
-import type { FC } from 'react'
-
-import { useEffect } from 'react'
-import { connect, useDispatch } from 'react-redux'
 import { Link, Navigate } from 'react-router-dom'
-import type { Dispatch, RootState } from '../../store/store'
-
-import { parseJwt } from '../../helpers/user'
+import { getAccessToken, parseJwt } from '../../helpers/user'
 import {
   PROFILE_ROUTE_UPDATE_USERNAME,
   PROFILE_ROUTE_UPDATE_USER_AVATAR,
   RESET_PASSWORD_ROUTE,
 } from '../../store/constants/route-constants'
 
-type ProfileProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>
+import { useFullSignOut } from '../../hooks/user/useFullSignOut'
+import { useUser } from '../../hooks/user/useUser'
+import { useUserStore } from '../../store/useUserStore'
 
-const ProfilePage: FC<ProfileProps> = ({
-  isAuthenticated,
-
-  userToken,
-  user,
-  fullSignOut,
-}) => {
-  const dispatch = useDispatch<Dispatch>()
-
-  useEffect(() => {
-    if (!user?.id && userToken?.id) dispatch.user.getUser(userToken.id)
-  }, [dispatch.user, user?.id, userToken.id])
+const ProfilePage = () => {
+  const { mutate: fullSignOut } = useFullSignOut()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+  const userToken = parseJwt(getAccessToken() || '')
+  const { user } = useUser(userToken.id)
 
   if (!isAuthenticated) {
     return <Navigate to="/" />
@@ -63,7 +52,7 @@ const ProfilePage: FC<ProfileProps> = ({
                   Reset Password
                 </Link>
                 <span
-                  onClick={fullSignOut}
+                  onClick={() => fullSignOut()}
                   className="font-normal text-pink-500 cursor-pointer"
                 >
                   Full Sign Out
@@ -89,14 +78,4 @@ const ProfilePage: FC<ProfileProps> = ({
   )
 }
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-  userToken: parseJwt(state.user.accessToken),
-  user: state.user,
-})
-
-const mapDispatch = (dispatch: Dispatch) => ({
-  fullSignOut: dispatch.user.fullSignOut,
-})
-
-export default connect(mapState, mapDispatch)(ProfilePage)
+export default ProfilePage

@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { SIGN_IN_ROUTE } from '../../../store/constants/route-constants'
+import type { SignUpPayloadT } from '../../../services/api/User/types'
 
 interface IProps {
-  handleSignUp: <T>(data: T) => Promise<void>
+  handleSignUp: (data: SignUpPayloadT) => void
 }
 
 const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
@@ -49,12 +50,12 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
   })
 
   return (
-    <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-md">
+    <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300 rounded-md">
       <form onSubmit={formik.handleSubmit} className="space-y-6">
         <div>
           <label
             htmlFor="username"
-            className="text-sm font-bold text-gray-600 block"
+            className="block text-sm font-bold text-gray-600"
           >
             Username
           </label>
@@ -65,7 +66,7 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             type="text"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
+            className="w-full p-2 mt-1 border border-gray-300 rounded"
           />
           {formik.touched.username && formik.errors.username ? (
             <p className="text-red-500">{formik.errors.username}</p>
@@ -74,7 +75,7 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
         <div>
           <label
             htmlFor="email"
-            className="text-sm font-bold text-gray-600 block"
+            className="block text-sm font-bold text-gray-600"
           >
             Email
           </label>
@@ -85,7 +86,7 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             type="text"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
+            className="w-full p-2 mt-1 border border-gray-300 rounded"
           />
           {formik.touched.email && formik.errors.email ? (
             <p className="text-red-500">{formik.errors.email}</p>
@@ -94,7 +95,7 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
         <div>
           <label
             htmlFor="password"
-            className="text-sm font-bold text-gray-600 block"
+            className="block text-sm font-bold text-gray-600"
           >
             Password
           </label>
@@ -105,7 +106,7 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             type="password"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
+            className="w-full p-2 mt-1 border border-gray-300 rounded"
             autoComplete="on"
           />
           {formik.touched.password && formik.errors.password ? (
@@ -115,7 +116,7 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
         <div>
           <label
             htmlFor="confirmPassword"
-            className="text-sm font-bold text-gray-600 block"
+            className="block text-sm font-bold text-gray-600"
           >
             Confirm Password
           </label>
@@ -126,7 +127,7 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             type="password"
-            className="w-full p-2 border border-gray-300 rounded mt-1"
+            className="w-full p-2 mt-1 border border-gray-300 rounded"
             autoComplete="on"
           />
           {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
@@ -140,9 +141,9 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
           >
             Sign Up
           </button>
-          <div className="mt-5 flex justify-center">
+          <div className="flex justify-center mt-5">
             <Link
-              className="font-small text-blue-400 dark:text-blue-500 hover:underline"
+              className="text-blue-400 font-small dark:text-blue-500 hover:underline"
               to={SIGN_IN_ROUTE}
             >
               Already have an account?

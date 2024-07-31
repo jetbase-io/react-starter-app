@@ -1,18 +1,16 @@
-import type { FC } from 'react'
-
 import { useFormik } from 'formik'
 
-import { connect } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import * as Yup from 'yup'
-import type { Dispatch, RootState } from '../../store/store'
 
-type ProfileProps = ReturnType<typeof mapState> & ReturnType<typeof mapDispatch>
+import { useUpdateUsername } from '../../hooks/user/useUpdateUsername'
+import { useUserStore } from '../../store/useUserStore'
 
-const UpdateUsernamePage: FC<ProfileProps> = ({
-  isAuthenticated,
-  updateUsername,
-}) => {
+const UpdateUsernamePage = () => {
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+
+  const { mutate: updateUsername } = useUpdateUsername()
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -23,9 +21,7 @@ const UpdateUsernamePage: FC<ProfileProps> = ({
         .required('Required'),
     }),
     onSubmit: values => {
-      updateUsername({
-        username: values.username,
-      })
+      updateUsername(values.username)
     },
   })
 
@@ -83,12 +79,4 @@ const UpdateUsernamePage: FC<ProfileProps> = ({
   )
 }
 
-const mapState = (state: RootState) => ({
-  isAuthenticated: state.user?.isAuthenticated,
-})
-
-const mapDispatch = (dispatch: Dispatch) => ({
-  updateUsername: dispatch.user.updateUsername,
-})
-
-export default connect(mapState, mapDispatch)(UpdateUsernamePage)
+export default UpdateUsernamePage
