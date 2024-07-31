@@ -1,26 +1,24 @@
-import { Link } from "react-router-dom";
-import { Navigate } from "react-router-dom";
-import { getAccessToken, parseJwt } from "../../helpers/user";
+import { Link, Navigate } from 'react-router-dom'
+import { getAccessToken, parseJwt } from '../../helpers/user'
 import {
   PROFILE_ROUTE_UPDATE_USERNAME,
   PROFILE_ROUTE_UPDATE_USER_AVATAR,
   RESET_PASSWORD_ROUTE,
-} from "../../store/constants/route-constants";
+} from '../../store/constants/route-constants'
 
-import { useFullSignOut } from "../../hooks/user/useFullSignOut";
-import { useUser } from "../../hooks/user/useUser";
-import { useUserStore } from "../../store/useUserStore";
+import { useFullSignOut } from '../../hooks/user/useFullSignOut'
+import { useUser } from '../../hooks/user/useUser'
+import { useUserStore } from '../../store/useUserStore'
 
 const ProfilePage = () => {
-  const { mutate: fullSignOut } = useFullSignOut();
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
-  const userToken = parseJwt(getAccessToken() || "");
+  const { mutate: fullSignOut } = useFullSignOut()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+  const userToken = parseJwt(getAccessToken() || '')
+  const { user } = useUser(userToken.id)
 
   if (!isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
-
-  const { user } = useUser(userToken.id);
 
   return (
     <section className="relative py-16">
@@ -29,10 +27,10 @@ const ProfilePage = () => {
           <div className="px-6">
             <div className="mt-12 text-center">
               <h3 className="mb-2 text-4xl font-semibold leading-normal text-gray-800">
-                {user?.username || "User"}
+                {user?.username || 'User'}
               </h3>
               <div className="mt-0 mb-2 text-sm font-bold leading-normal text-gray-500">
-                {user?.email || "user@mail.com"}
+                {user?.email || 'user@mail.com'}
               </div>
               <div className="mt-10">
                 <Link
@@ -77,7 +75,7 @@ const ProfilePage = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default ProfilePage;
+export default ProfilePage

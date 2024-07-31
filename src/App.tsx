@@ -1,17 +1,18 @@
-import "react-toastify/dist/ReactToastify.min.css";
+import 'react-toastify/dist/ReactToastify.min.css'
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
-import React, { FC } from "react";
-import { Route, Routes } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import type { Stripe } from '@stripe/stripe-js'
+import type { FC } from 'react'
 
-import { HomePage, NotFoundPage } from "./pages/index";
-import routes from "./routes";
-import Header from "./components/Header";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { Route, Routes } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import Header from './components/Header'
+import { HomePage, NotFoundPage } from './pages/index'
+import routes from './routes'
 
-let stripePromise: Promise<Stripe | null>;
+let stripePromise: Promise<Stripe | null>
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,11 +22,11 @@ const queryClient = new QueryClient({
       refetchOnMount: false,
     },
   },
-});
+})
 
 const App: FC = () => {
   if (!stripePromise) {
-    stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "");
+    stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '')
   }
 
   return (
@@ -36,21 +37,21 @@ const App: FC = () => {
           <div className="max-w-screen-xl m-auto ">
             <Routes>
               <Route path="/" element={<HomePage />} />
-              {routes.map((route) => (
+              {routes.map(route => (
                 <Route
                   path={route.path}
                   element={route.element}
                   key={route.id}
                 />
               ))}
-              <Route path={"/*"} element={<NotFoundPage />} />
+              <Route path={'/*'} element={<NotFoundPage />} />
             </Routes>
           </div>
         </Elements>
         <ToastContainer autoClose={8000} position={toast.POSITION.TOP_RIGHT} />
       </div>
     </QueryClientProvider>
-  );
-};
+  )
+}
 
-export default App;
+export default App

@@ -1,20 +1,20 @@
-import { FC, useEffect } from "react";
+import { useEffect } from 'react'
 
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router'
 
-import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
+import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
 
-import { useUserStore } from "../../store/useUserStore";
+import { useUserStore } from '../../store/useUserStore'
 
 const HomePage = () => {
-  const navigate = useNavigate();
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const navigate = useNavigate()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate(SIGN_IN_ROUTE);
+      navigate(SIGN_IN_ROUTE)
     }
-  }, []);
+  }, [isAuthenticated, navigate])
 
   return (
     <div className="pb-10 mx-auto mt-10 rounded-lg shadow-xl">
@@ -24,7 +24,7 @@ const HomePage = () => {
         </h1>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage

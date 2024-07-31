@@ -1,109 +1,110 @@
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import classNames from "classnames";
-import { useFormik } from "formik";
-import { FC } from "react";
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
+import classNames from 'classnames'
+import { useFormik } from 'formik'
+import type { FC } from 'react'
 
-import { Navigate, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import * as Yup from "yup";
+import { Navigate, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import * as Yup from 'yup'
 
-import { getChosenPlan } from "../../helpers/plan";
-import { HOME_ROUTE } from "../../store/constants/route-constants";
+import { getChosenPlan } from '../../helpers/plan'
+import { HOME_ROUTE } from '../../store/constants/route-constants'
 
-import { useGetPaymentMethods } from "../../hooks/user/useGetPaymentMethods";
-import { useDetachPaymentMethod } from "../../hooks/user/useDetachPaymentMethod";
-import { useActivateSubscription } from "../../hooks/user/useActivateSubscription";
+import { useGetPaymentMethods } from '../../hooks/user/useGetPaymentMethods'
+import { useDetachPaymentMethod } from '../../hooks/user/useDetachPaymentMethod'
+import { useActivateSubscription } from '../../hooks/user/useActivateSubscription'
 
-import { useUserStore } from "../../store/useUserStore";
+import { useUserStore } from '../../store/useUserStore'
 
 const BillingPage: FC = () => {
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
-  const setSubscription = useUserStore((state) => state.setSubscription);
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+  const setSubscription = useUserStore(state => state.setSubscription)
 
-  const { mutate: activateSubscription } = useActivateSubscription();
-  const navigate = useNavigate();
+  const { mutate: activateSubscription } = useActivateSubscription()
+  const navigate = useNavigate()
 
-  const stripe = useStripe();
-  const elements = useElements();
-  const chosenPlan = getChosenPlan();
+  const stripe = useStripe()
+  const elements = useElements()
+  const chosenPlan = getChosenPlan()
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" />;
-  }
-
-  const { paymentMethods } = useGetPaymentMethods();
-  const { mutate: detachPaymentMethod } = useDetachPaymentMethod();
+  const { paymentMethods } = useGetPaymentMethods()
+  const { mutate: detachPaymentMethod } = useDetachPaymentMethod()
 
   const handleResultData = (resultData: {
-    clientSecret: string;
-    status: string;
-    nickname: string | null;
+    clientSecret: string
+    status: string
+    nickname: string | null
   }) => {
     if (!stripe || !elements) {
-      return;
+      return
     }
-    if (resultData) {
-      const { clientSecret, status, nickname } = resultData;
 
-      if (status === "requires_action") {
-        stripe.confirmCardPayment(clientSecret).then((res) => {
+    if (resultData) {
+      const { clientSecret, status, nickname } = resultData
+
+      if (status === 'requires_action') {
+        stripe.confirmCardPayment(clientSecret).then(res => {
           if (res.error) {
-            toast.error("Payment failed");
+            toast.error('Payment failed')
           } else {
-            setSubscription({ status: "active", nickname: nickname || "" });
-            toast.success("Payment was successfully applied!");
+            setSubscription({ status: 'active', nickname: nickname || '' })
+            toast.success('Payment was successfully applied!')
           }
-        });
+        })
       } else {
-        setSubscription({ status: "active", nickname: nickname || "" });
-        toast.success("Payment was successfully applied!");
+        setSubscription({ status: 'active', nickname: nickname || '' })
+        toast.success('Payment was successfully applied!')
       }
     }
-  };
+  }
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email format").required("Required"),
+      email: Yup.string().email('Invalid email format').required('Required'),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       if (!stripe || !elements) {
-        return;
+        return
       }
 
-      const cardElement = elements!.getElement(CardElement);
+      const cardElement = elements!.getElement(CardElement)
 
       const result = await stripe.createPaymentMethod({
-        type: "card",
+        type: 'card',
         card: cardElement!,
         billing_details: {
           email: values.email,
         },
-      });
+      })
       const args = {
         priceId: chosenPlan.id,
         paymentMethodId: result.paymentMethod?.id,
-      };
+      }
 
       activateSubscription(args, {
         onSuccess(data) {
-          handleResultData(data);
-          navigate(HOME_ROUTE);
+          handleResultData(data)
+          navigate(HOME_ROUTE)
         },
-      });
+      })
     },
-  });
+  })
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" />
+  }
 
   const buttonClass = classNames({
-    "bg-blue-600 hover:bg-blue-600": formik.isValid,
-    "bg-gray-400 ": !formik.isValid,
-  });
+    'bg-blue-600 hover:bg-blue-600': formik.isValid,
+    'bg-gray-400 ': !formik.isValid,
+  })
 
   const onExistedCardClick = async (
     paymentMethodId: string,
-    priceId: string
+    priceId: string,
   ) => {
     activateSubscription(
       {
@@ -112,17 +113,17 @@ const BillingPage: FC = () => {
       },
       {
         onSuccess(data) {
-          handleResultData(data);
-          navigate(HOME_ROUTE);
+          handleResultData(data)
+          navigate(HOME_ROUTE)
         },
-      }
-    );
-  };
+      },
+    )
+  }
 
   const onDetachCardClick = (paymentMethodId: string) => {
-    detachPaymentMethod({ paymentMethods, paymentMethodId });
-    navigate(HOME_ROUTE);
-  };
+    detachPaymentMethod({ paymentMethods, paymentMethodId })
+    navigate(HOME_ROUTE)
+  }
 
   return (
     <div>
@@ -133,10 +134,10 @@ const BillingPage: FC = () => {
         <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300">
           <div className="text-center">
             <h4>
-              You have chosen{" "}
+              You have chosen{' '}
               <span className="font-bold text-blue-500">
                 {chosenPlan.nickname}
-              </span>{" "}
+              </span>{' '}
               plan
             </h4>
           </div>
@@ -187,7 +188,7 @@ const BillingPage: FC = () => {
             >
               <input
                 type="text"
-                disabled={true}
+                disabled
                 className="w-1/2 pl-1 font-bold text-left text-center text-gray-600 align-baseline"
                 placeholder={`${card.brand} - ${card.last4}`}
               />
@@ -210,7 +211,7 @@ const BillingPage: FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BillingPage;
+export default BillingPage

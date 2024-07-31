@@ -1,7 +1,7 @@
 export const setChosenPlan = (chosenPlan: {}) => {
-  localStorage.setItem("chosenPlan", JSON.stringify(chosenPlan));
-};
+  localStorage.setItem('chosenPlan', JSON.stringify(chosenPlan))
+}
 
 export const getChosenPlan = () => {
-  return JSON.parse(localStorage.getItem("chosenPlan") || "");
-};
+  return JSON.parse(localStorage.getItem('chosenPlan') || '')
+}

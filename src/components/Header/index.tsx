@@ -1,8 +1,8 @@
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import React, { FC, useState } from "react";
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
+import React, { FC, useState } from 'react'
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 import {
   CONTACT_US_ROUTE,
@@ -11,40 +11,40 @@ import {
   RESET_PASSWORD_ROUTE,
   SIGN_IN_ROUTE,
   SIGN_UP_ROUTE,
-} from "../../store/constants/route-constants";
+} from '../../store/constants/route-constants'
 
-import HeaderLink from "../HeaderLink";
-import { useSignOut } from "../../hooks/user/useSignOut";
-import { useUserStore } from "../../store/useUserStore";
+import HeaderLink from '../HeaderLink'
+import { useSignOut } from '../../hooks/user/useSignOut'
+import { useUserStore } from '../../store/useUserStore'
 
 const Header = () => {
-  const [openBurger, setOpenBurger] = useState(false);
-  const { mutate: signOut } = useSignOut();
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const [openBurger, setOpenBurger] = useState(false)
+  const { mutate: signOut } = useSignOut()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   const handleSignOutClick: React.MouseEventHandler<HTMLButtonElement> = () => {
-    signOut();
-  };
+    signOut()
+  }
 
   const LINKS = [
-    { id: 0, text: "Main", to: "/", isVisible: isAuthenticated },
-    { id: 1, text: "Plans", to: PLANS_ROUTE, isVisible: isAuthenticated },
+    { id: 0, text: 'Main', to: '/', isVisible: isAuthenticated },
+    { id: 1, text: 'Plans', to: PLANS_ROUTE, isVisible: isAuthenticated },
     {
       id: 2,
-      text: "My Profile",
+      text: 'My Profile',
       to: PROFILE_ROUTE,
       isVisible: isAuthenticated,
     },
-  ];
+  ]
 
   const toggle = () => {
-    setOpenBurger(!openBurger);
-  };
+    setOpenBurger(!openBurger)
+  }
 
   const burgerClass = classNames({
     block: openBurger,
     hidden: !openBurger,
-  });
+  })
 
   return (
     <header className="sticky top-0 shadow-sm">
@@ -69,6 +69,7 @@ const Header = () => {
             </Link>
             {isAuthenticated && (
               <button
+                type="button"
                 onClick={handleSignOutClick}
                 className="text-white bg-[#117ff9] hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
               >
@@ -94,7 +95,7 @@ const Header = () => {
                   fillRule="evenodd"
                   d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                   clipRule="evenodd"
-                ></path>
+                />
               </svg>
               <svg
                 className="hidden w-6 h-6"
@@ -106,7 +107,7 @@ const Header = () => {
                   fillRule="evenodd"
                   d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                   clipRule="evenodd"
-                ></path>
+                />
               </svg>
             </button>
           </div>
@@ -117,14 +118,14 @@ const Header = () => {
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
               {LINKS.map(
                 ({ id, text, to, isVisible }) =>
-                  isVisible && <HeaderLink key={id} text={text} to={to} />
+                  isVisible && <HeaderLink key={id} text={text} to={to} />,
               )}
             </ul>
           </div>
         </div>
       </nav>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

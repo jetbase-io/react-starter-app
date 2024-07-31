@@ -1,62 +1,62 @@
-import classNames from "classnames";
-import { useFormik } from "formik";
-import { FC, useEffect } from "react";
+import classNames from 'classnames'
+import { useFormik } from 'formik'
+import { FC, useEffect } from 'react'
 
-import { Link, Navigate, useLocation } from "react-router-dom";
-import * as Yup from "yup";
+import { Link, Navigate, useLocation } from 'react-router-dom'
+import * as Yup from 'yup'
 
 import {
   FORGOT_PASSWORD_ROUTE,
   SIGN_UP_ROUTE,
-} from "../../store/constants/route-constants";
+} from '../../store/constants/route-constants'
 
-import { useSignIn } from "../../hooks/user/useSignIn";
-import { useConfirm } from "../../hooks/user/useConfirm";
-import { useUserStore } from "../../store/useUserStore";
+import { useSignIn } from '../../hooks/user/useSignIn'
+import { useConfirm } from '../../hooks/user/useConfirm'
+import { useUserStore } from '../../store/useUserStore'
 
-const TOKEN = "confirmation_token";
+const TOKEN = 'confirmation_token'
 
 const SignInPage = () => {
-  const { search } = useLocation();
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
-  const token = new URLSearchParams(search).get(TOKEN);
-  const { mutate: signIn } = useSignIn();
-  const { mutate: confirm } = useConfirm();
+  const { search } = useLocation()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+  const token = new URLSearchParams(search).get(TOKEN)
+  const { mutate: signIn } = useSignIn()
+  const { mutate: confirm } = useConfirm()
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) return
 
-    confirm(token);
-  }, []);
+    confirm(token)
+  }, [confirm, token])
 
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
       password: Yup.string()
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
     }),
-    onSubmit: (values) => {
+    onSubmit: values => {
       signIn({
         username: values.username,
         password: values.password,
-      });
+      })
     },
-  });
+  })
 
   const buttonClass = classNames({
-    "bg-blue-600 hover:bg-blue-600": formik.isValid,
-    "bg-gray-400": !formik.isValid,
-  });
+    'bg-blue-600 hover:bg-blue-600': formik.isValid,
+    'bg-gray-400': !formik.isValid,
+  })
 
   if (isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
 
   return (
@@ -126,7 +126,7 @@ const SignInPage = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignInPage;
+export default SignInPage

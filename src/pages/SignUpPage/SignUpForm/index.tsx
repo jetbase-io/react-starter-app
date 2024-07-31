@@ -1,52 +1,53 @@
-import { FC } from "react";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import classNames from "classnames";
-import { Link } from "react-router-dom";
+import type { FC } from 'react'
 
-import { SIGN_IN_ROUTE } from "../../../store/constants/route-constants";
-import { SignUpPayloadT } from "../../../services/api/User/types";
+import classNames from 'classnames'
+import { useFormik } from 'formik'
+import { Link } from 'react-router-dom'
+import * as Yup from 'yup'
+
+import { SIGN_IN_ROUTE } from '../../../store/constants/route-constants'
+import type { SignUpPayloadT } from '../../../services/api/User/types'
 
 interface IProps {
-  handleSignUp: (data: SignUpPayloadT) => void;
+  handleSignUp: (data: SignUpPayloadT) => void
 }
 
 const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
   const formik = useFormik({
     initialValues: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
       email: Yup.string()
-        .email("Invalid email format")
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .email('Invalid email format')
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
       password: Yup.string()
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Passwords must match")
-        .required("Required"),
+        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .required('Required'),
     }),
-    onSubmit: (values) => {
+    onSubmit: values => {
       handleSignUp({
         username: values.username,
         email: values.email,
         password: values.password,
-      });
+      })
     },
-  });
+  })
 
   const buttonClass = classNames({
-    "bg-blue-600 hover:bg-blue-600": formik.isValid,
-    "bg-gray-400": !formik.isValid,
-  });
+    'bg-blue-600 hover:bg-blue-600': formik.isValid,
+    'bg-gray-400': !formik.isValid,
+  })
 
   return (
     <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300 rounded-md">
@@ -151,7 +152,7 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default SignUpForm;
+export default SignUpForm

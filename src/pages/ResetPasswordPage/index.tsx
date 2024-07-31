@@ -1,65 +1,65 @@
-import classNames from "classnames";
-import { useFormik } from "formik";
+import classNames from 'classnames'
+import { useFormik } from 'formik'
 
-import { Navigate, useNavigate } from "react-router-dom";
-import * as Yup from "yup";
+import { Navigate, useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
 
-import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
+import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
 
-import { useResetPassword } from "../../hooks/user/useResetPassword";
-import { useUserStore } from "../../store/useUserStore";
+import { useResetPassword } from '../../hooks/user/useResetPassword'
+import { useUserStore } from '../../store/useUserStore'
 
-type IPasswordValues = Record<string, string>;
+type IPasswordValues = Record<string, string>
 
 const ResetPasswordPage = () => {
-  const navigate = useNavigate();
-  const { mutate: resetPassword } = useResetPassword();
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const navigate = useNavigate()
+  const { mutate: resetPassword } = useResetPassword()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   const passwordValues: IPasswordValues = {
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  };
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  }
 
   const formik = useFormik({
     initialValues: passwordValues,
     validationSchema: Yup.object({
       oldPassword: Yup.string()
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
       newPassword: Yup.string()
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
       confirmPassword: Yup.string().oneOf(
-        [Yup.ref("newPassword"), null],
-        "Passwords must match"
+        [Yup.ref('newPassword'), null],
+        'Passwords must match',
       ),
     }),
-    onSubmit: (values) => {
+    onSubmit: values => {
       resetPassword({
         oldPassword: values.oldPassword,
         newPassword: values.newPassword,
         confirmPassword: values.confirmPassword,
-      });
-      navigate(SIGN_IN_ROUTE);
+      })
+      navigate(SIGN_IN_ROUTE)
     },
-  });
+  })
 
   const buttonClass = classNames({
-    "bg-blue-600 hover:bg-blue-600": formik.isValid,
-    "bg-gray-400": !formik.isValid,
-  });
+    'bg-blue-600 hover:bg-blue-600': formik.isValid,
+    'bg-gray-400': !formik.isValid,
+  })
 
   if (!isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
 
   const inputs = [
-    { id: 0, label: "Old Password", name: "oldPassword" },
-    { id: 1, label: "New Password", name: "newPassword" },
-    { id: 2, label: "Confirm Password", name: "confirmPassword" },
-  ];
+    { id: 0, label: 'Old Password', name: 'oldPassword' },
+    { id: 1, label: 'New Password', name: 'newPassword' },
+    { id: 2, label: 'Confirm Password', name: 'confirmPassword' },
+  ]
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
@@ -68,7 +68,7 @@ const ResetPasswordPage = () => {
       </div>
       <div className="w-full max-w-md p-8 mx-auto mt-4 bg-white border border-gray-300 rounded-md">
         <form onSubmit={formik.handleSubmit} className="space-y-6">
-          {inputs.map((input) => (
+          {inputs.map(input => (
             <div key={input.id}>
               <label
                 htmlFor={input.name}
@@ -103,7 +103,7 @@ const ResetPasswordPage = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ResetPasswordPage;
+export default ResetPasswordPage

@@ -1,30 +1,30 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import User from "../../services/api/User";
-import { toast } from "react-toastify";
-import { CacheKeys } from "../../constants/cacheKeys";
-import { PaymentMethodsT } from "../../services/api/User/types";
+import { toast } from 'react-toastify'
+import User from '../../services/api/User'
+import { CacheKeys } from '../../constants/cacheKeys'
+import type { PaymentMethodsT } from '../../services/api/User/types'
 
 export const useDetachPaymentMethod = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const { isPending, mutate } = useMutation({
     mutationFn: User.detachPaymentMethod,
-    onSuccess: (paymentMethods) => {
+    onSuccess: paymentMethods => {
       queryClient.setQueryData<PaymentMethodsT[]>(
         [CacheKeys.PAYMENT_METHODS],
-        paymentMethods
-      );
+        paymentMethods,
+      )
 
-      toast.success("Card was detached successfully!");
+      toast.success('Card was detached successfully!')
     },
     onError: ({ message }) => {
-      toast.error(message);
+      toast.error(message)
     },
-  });
+  })
 
   return {
     isPending,
     mutate,
-  };
-};
+  }
+}

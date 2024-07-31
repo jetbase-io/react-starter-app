@@ -1,39 +1,39 @@
-import classNames from "classnames";
-import { useFormik } from "formik";
+import classNames from 'classnames'
+import { useFormik } from 'formik'
 
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import * as Yup from "yup";
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
 
-import { SIGN_IN_ROUTE } from "../../store/constants/route-constants";
-import { useUserStore } from "../../store/useUserStore";
+import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
+import { useUserStore } from '../../store/useUserStore'
 
 const ForgotPasswordPage = () => {
-  const navigate = useNavigate();
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const navigate = useNavigate()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: '',
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .email("Invalid email format")
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .email('Invalid email format')
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
     }),
-    onSubmit: (values) => {
+    onSubmit: values => {
       // ForgotPasswordPage():
-      navigate(SIGN_IN_ROUTE);
+      navigate(SIGN_IN_ROUTE)
     },
-  });
+  })
 
   const buttonClass = classNames({
-    "bg-blue-600 hover:bg-blue-600": formik.isValid,
-    "bg-gray-400": !formik.isValid,
-  });
+    'bg-blue-600 hover:bg-blue-600': formik.isValid,
+    'bg-gray-400': !formik.isValid,
+  })
 
   if (isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
 
   return (
@@ -82,7 +82,7 @@ const ForgotPasswordPage = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ForgotPasswordPage;
+export default ForgotPasswordPage

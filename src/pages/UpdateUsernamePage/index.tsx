@@ -1,33 +1,33 @@
-import { useFormik } from "formik";
+import { useFormik } from 'formik'
 
-import { Navigate } from "react-router-dom";
-import * as Yup from "yup";
+import { Navigate } from 'react-router-dom'
+import * as Yup from 'yup'
 
-import { useUpdateUsername } from "../../hooks/user/useUpdateUsername";
-import { useUserStore } from "../../store/useUserStore";
+import { useUpdateUsername } from '../../hooks/user/useUpdateUsername'
+import { useUserStore } from '../../store/useUserStore'
 
 const UpdateUsernamePage = () => {
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" />;
-  }
-
-  const { mutate: updateUsername } = useUpdateUsername();
+  const { mutate: updateUsername } = useUpdateUsername()
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      username: '',
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(6, "Minimum 6 characters required")
-        .required("Required"),
+        .min(6, 'Minimum 6 characters required')
+        .required('Required'),
     }),
-    onSubmit: (values) => {
-      updateUsername(values.username);
+    onSubmit: values => {
+      updateUsername(values.username)
     },
-  });
+  })
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" />
+  }
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
@@ -76,7 +76,7 @@ const UpdateUsernamePage = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UpdateUsernamePage;
+export default UpdateUsernamePage

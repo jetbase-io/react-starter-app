@@ -1,20 +1,20 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query'
 
-import User from "../../services/api/User";
-import { useUserStore } from "../../store/useUserStore";
+import User from '../../services/api/User'
+import { useUserStore } from '../../store/useUserStore'
 
 export const useFullSignOut = () => {
-  const logOutUser = useUserStore((state) => state.logOutUser);
+  const logOutUser = useUserStore(state => state.logOutUser)
 
   const { isPending, mutate } = useMutation({
     mutationFn: User.fullSignOut,
     onSuccess: () => {
-      logOutUser();
+      logOutUser()
     },
-  });
+  })
 
   return {
     isPending,
     mutate,
-  };
-};
+  }
+}

@@ -1,24 +1,24 @@
-import { FC } from "react";
+import type { FC } from 'react'
 
-import SignUpForm from "./SignUpForm";
-import Placeholder from "./Placeholder";
+import { Navigate, useNavigate } from 'react-router'
+import SignUpForm from './SignUpForm'
+import Placeholder from './Placeholder'
 
-import { Navigate, useNavigate } from "react-router";
-import { useSignUp } from "../../hooks/user/useSignUp";
-import { useUserStore } from "../../store/useUserStore";
+import { useSignUp } from '../../hooks/user/useSignUp'
+import { useUserStore } from '../../store/useUserStore'
 
 const SignUpPage: FC = () => {
-  const navigate = useNavigate();
-  const { mutate: signUp } = useSignUp();
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
-  const isSignedUp = useUserStore((state) => state.isSignedUp);
+  const navigate = useNavigate()
+  const { mutate: signUp } = useSignUp()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+  const isSignedUp = useUserStore(state => state.isSignedUp)
 
   const handleClick = () => {
-    return navigate("/");
-  };
+    return navigate('/')
+  }
 
   if (isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
 
   return (
@@ -32,16 +32,14 @@ const SignUpPage: FC = () => {
         </>
       ) : (
         <Placeholder
-          title={"You have been successfully signed up!"}
-          message={
-            "Please check your inbox and confirm an email address to be able to sign in."
-          }
+          title="You have been successfully signed up!"
+          message="Please check your inbox and confirm an email address to be able to sign in."
           btnTitle="Go to the Home page"
           onClick={handleClick}
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SignUpPage;
+export default SignUpPage

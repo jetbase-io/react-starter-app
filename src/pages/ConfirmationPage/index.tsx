@@ -1,33 +1,33 @@
-import { useEffect } from "react";
+import { useEffect } from 'react'
 
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 
-import Placeholder from "../SignUpPage/Placeholder";
-import { useConfirm } from "../../hooks/user/useConfirm";
-import { useUserStore } from "../../store/useUserStore";
+import Placeholder from '../SignUpPage/Placeholder'
+import { useConfirm } from '../../hooks/user/useConfirm'
+import { useUserStore } from '../../store/useUserStore'
 
-const TOKEN = "confirmation_token";
+const TOKEN = 'confirmation_token'
 
 const ConfirmationPage = () => {
-  const { search } = useLocation();
-  const token = new URLSearchParams(search).get(TOKEN);
-  const navigate = useNavigate();
-  const { mutate: confirm } = useConfirm();
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
-  const isConfirmed = useUserStore((state) => state.isConfirmed);
+  const { search } = useLocation()
+  const token = new URLSearchParams(search).get(TOKEN)
+  const navigate = useNavigate()
+  const { mutate: confirm } = useConfirm()
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
+  const isConfirmed = useUserStore(state => state.isConfirmed)
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) return
 
-    confirm(token);
-  }, []);
+    confirm(token)
+  }, [confirm, token])
 
   const handleClick = () => {
-    return navigate("/");
-  };
+    return navigate('/')
+  }
 
   if (isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
 
   return (
@@ -35,24 +35,22 @@ const ConfirmationPage = () => {
       <div className="w-full max-w-md mx-auto">
         {isConfirmed ? (
           <Placeholder
-            title={"Confirmation successful!"}
-            message={
-              "Thank you for confirmation your email address. Now you can sign in."
-            }
-            btnTitle={"Go to the Sign in page"}
+            title="Confirmation successful!"
+            message="Thank you for confirmation your email address. Now you can sign in."
+            btnTitle="Go to the Sign in page"
             onClick={handleClick}
           />
         ) : (
           <Placeholder
-            title={"Invalid token"}
-            message={"Unable to proceed"}
-            btnTitle={"Go to the Home page"}
+            title="Invalid token"
+            message="Unable to proceed"
+            btnTitle="Go to the Home page"
             onClick={handleClick}
           />
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ConfirmationPage;
+export default ConfirmationPage

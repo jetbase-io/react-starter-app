@@ -1,34 +1,34 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query'
 
-import User from "../../services/api/User";
-import { toast } from "react-toastify";
-import { setUserTokensToLocalStorage } from "../../helpers/user";
-import { useUserStore } from "../../store/useUserStore";
+import { toast } from 'react-toastify'
+import User from '../../services/api/User'
+import { setUserTokensToLocalStorage } from '../../helpers/user'
+import { useUserStore } from '../../store/useUserStore'
 
 export const useSignIn = () => {
-  const setIsAuthenticated = useUserStore((state) => state.setIsAuthenticated);
-  const setSubscription = useUserStore((state) => state.setSubscription);
+  const setIsAuthenticated = useUserStore(state => state.setIsAuthenticated)
+  const setSubscription = useUserStore(state => state.setSubscription)
 
   const { isPending, mutate } = useMutation({
     mutationFn: User.signIn,
-    onSuccess: async (data) => {
-      setIsAuthenticated(true);
+    onSuccess: async data => {
+      setIsAuthenticated(true)
 
       if (data) {
-        setUserTokensToLocalStorage(data.accessToken, data.refreshToken);
+        setUserTokensToLocalStorage(data.accessToken, data.refreshToken)
 
-        const subscription = await User.checkSubscription();
+        const subscription = await User.checkSubscription()
 
-        setSubscription(subscription);
+        setSubscription(subscription)
       }
     },
     onError: ({ message }) => {
-      toast.error(message);
+      toast.error(message)
     },
-  });
+  })
 
   return {
     isPending,
     mutate,
-  };
-};
+  }
+}

@@ -1,44 +1,45 @@
-import { useFormik } from "formik";
-import { useState } from "react";
+import { useFormik } from 'formik'
+import { useState } from 'react'
 
-import { Navigate } from "react-router-dom";
-import * as Yup from "yup";
+import { Navigate } from 'react-router-dom'
+import * as Yup from 'yup'
 
-import { useUpdateUserAvatar } from "../../hooks/user/useUpdateUserAvatar";
-import { useUserStore } from "../../store/useUserStore";
+import { useUpdateUserAvatar } from '../../hooks/user/useUpdateUserAvatar'
+import { useUserStore } from '../../store/useUserStore'
 
 const UpdateUserAvatarPage = () => {
-  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
-  if (!isAuthenticated) {
-    return <Navigate to="/" />;
-  }
-  const [preview, setPreview] = useState<string>("");
-  const { mutate: updateUserAvatar } = useUpdateUserAvatar();
+  const [preview, setPreview] = useState<string>('')
+  const { mutate: updateUserAvatar } = useUpdateUserAvatar()
 
   const formik = useFormik({
     initialValues: {
-      image: "",
+      image: '',
     },
     validationSchema: Yup.object({
       image: Yup.mixed()
-        .required("Image is required!")
+        .required('Image is required!')
         .test(
-          "FILE SIZE",
-          "Too Big!",
-          (value: any) => value && value.size < 1024 * 1024
+          'FILE SIZE',
+          'Too Big!',
+          (value: any) => value && value.size < 1024 * 1024,
         )
         .test(
-          "FILE TYPE",
-          "Invalid!",
+          'FILE TYPE',
+          'Invalid!',
           (value: any) =>
-            value && ["image/png", "image/jpeg"].includes(value.type)
+            value && ['image/png', 'image/jpeg'].includes(value.type),
         ),
     }),
-    onSubmit: (values) => {
-      updateUserAvatar(values.image as unknown as File);
+    onSubmit: values => {
+      updateUserAvatar(values.image as unknown as File)
     },
-  });
+  })
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" />
+  }
 
   return (
     <div className="flex flex-col justify-center min-h-screen">
@@ -63,12 +64,13 @@ const UpdateUserAvatarPage = () => {
                         {formik.values.image && (
                           <div className="flex flex-row ">
                             <img
+                              alt="preview"
                               className="object-cover w-20 h-20 rounded"
                               src={preview}
                             />
                           </div>
                         )}
-                        <i className="text-blue-700 fa fa-folder-open fa-3x"></i>
+                        <i className="text-blue-700 fa fa-folder-open fa-3x" />
                         {!formik.values.image && (
                           <span className="block font-normal text-gray-400">
                             Click to choose an image
@@ -78,12 +80,12 @@ const UpdateUserAvatarPage = () => {
                     </div>
                     <input
                       name="image"
-                      onChange={(e) => {
-                        formik.setFieldValue("image", e.target.files![0]);
-                        setPreview(URL.createObjectURL(e.target.files![0]));
+                      onChange={e => {
+                        formik.setFieldValue('image', e.target.files![0])
+                        setPreview(URL.createObjectURL(e.target.files![0]))
                       }}
                       type="file"
-                      style={{ display: "none" }}
+                      style={{ display: 'none' }}
                     />
                   </label>
                   {formik.errors.image && (
@@ -113,7 +115,7 @@ const UpdateUserAvatarPage = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UpdateUserAvatarPage;
+export default UpdateUserAvatarPage
