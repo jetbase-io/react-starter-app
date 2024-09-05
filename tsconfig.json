@@ -16,5 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "git-scripts"]
+  "include": [
+    "src",
+    "git-scripts",
+    "eslintrc.json",
+    "vite.config.ts"
+  ]
 }
