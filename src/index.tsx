@@ -11,6 +11,7 @@ import reportWebVitals from './reportWebVitals'
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
+  // @ts-expect-error
   <HistoryRouter history={history}>
     <App />
   </HistoryRouter>,
