@@ -1,15 +1,11 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
 
-import { Navigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { useUpdateUserAvatar } from '../../hooks/user/useUpdateUserAvatar'
-import { useUserStore } from '../../store/useUserStore'
 
 const UpdateUserAvatarPage = () => {
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
-
   const [preview, setPreview] = useState<string>('')
   const { mutate: updateUserAvatar } = useUpdateUserAvatar()
 
@@ -36,10 +32,6 @@ const UpdateUserAvatarPage = () => {
       updateUserAvatar(values.image as unknown as File)
     },
   })
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" />
-  }
 
   return (
     <div className="flex flex-col justify-center min-h-screen">

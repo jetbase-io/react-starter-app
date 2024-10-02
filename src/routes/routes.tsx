@@ -9,11 +9,11 @@ import {
   SignUpPage,
   UpdateUserAvatarPage,
   UpdateUsernamePage,
-} from './pages'
-import ConfirmationPage from './pages/ConfirmationPage'
-import ContactUsPage from './pages/CountactUs'
-import ForgotPasswordPage from './pages/ForgotPasswordPage'
-import PlansPage from './pages/PlansPage'
+} from '../pages'
+import ConfirmationPage from '../pages/ConfirmationPage'
+import ContactUsPage from '../pages/CountactUs'
+import ForgotPasswordPage from '../pages/ForgotPasswordPage'
+import PlansPage from '../pages/PlansPage'
 import {
   BILLING_ROUTE,
   FORGOT_PASSWORD_ROUTE,
@@ -26,16 +26,59 @@ import {
   CONTACT_US_ROUTE,
   PLANS_ROUTE,
   CONFIRMATION_ROUTE,
-} from './store/constants/route-constants'
+} from '../store/constants/route-constants'
 
-interface Page {
+export interface Page {
   id: number
   path: string
   title: string
   element: React.ReactElement
 }
 
+// public routes
+
 const routes: Page[] = [
+  {
+    id: 1,
+    path: CONTACT_US_ROUTE,
+    title: 'ContactUsPage',
+    element: <ContactUsPage />,
+  },
+]
+
+// public routes that can't be accessed by authorized user
+
+export const publicOnlyRoutes: Page[] = [
+  {
+    id: 1,
+    path: SIGN_UP_ROUTE,
+    title: 'SignUpPage',
+    element: <SignUpPage />,
+  },
+  {
+    id: 2,
+    path: SIGN_IN_ROUTE,
+    title: 'SignInPage',
+    element: <SignInPage />,
+  },
+  {
+    id: 3,
+    path: FORGOT_PASSWORD_ROUTE,
+    title: 'ForgotPassword',
+    element: <ForgotPasswordPage />,
+  },
+
+  {
+    id: 4,
+    path: CONFIRMATION_ROUTE,
+    title: 'ConfirmationPage',
+    element: <ConfirmationPage />,
+  },
+]
+
+// private routes that can't be accessed by non-authorized user
+
+export const privateRoutes: Page[] = [
   {
     id: 1,
     path: '/',
@@ -44,69 +87,39 @@ const routes: Page[] = [
   },
   {
     id: 2,
-    path: SIGN_UP_ROUTE,
-    title: 'SignUpPage',
-    element: <SignUpPage />,
-  },
-  {
-    id: 3,
-    path: SIGN_IN_ROUTE,
-    title: 'SignInPage',
-    element: <SignInPage />,
-  },
-  {
-    id: 4,
     path: RESET_PASSWORD_ROUTE,
     title: 'ResetPasswordPage',
     element: <ResetPasswordPage />,
   },
   {
-    id: 5,
+    id: 3,
     path: BILLING_ROUTE,
     title: 'BillingPage',
     element: <BillingPage />,
   },
   {
-    id: 6,
+    id: 4,
     path: PROFILE_ROUTE,
     title: 'ProfilePage',
     element: <ProfilePage />,
   },
   {
-    id: 7,
+    id: 5,
     path: PROFILE_ROUTE_UPDATE_USERNAME,
     title: 'UpdateUsernamePage',
     element: <UpdateUsernamePage />,
   },
   {
-    id: 8,
+    id: 6,
     path: PROFILE_ROUTE_UPDATE_USER_AVATAR,
     title: 'UpdateUserAvatarPage',
     element: <UpdateUserAvatarPage />,
   },
   {
-    id: 9,
-    path: FORGOT_PASSWORD_ROUTE,
-    title: 'ForgotPassword',
-    element: <ForgotPasswordPage />,
-  },
-  {
-    id: 10,
-    path: CONTACT_US_ROUTE,
-    title: 'ContactUsPage',
-    element: <ContactUsPage />,
-  },
-  {
-    id: 11,
+    id: 7,
     path: PLANS_ROUTE,
     title: 'PlansPage',
     element: <PlansPage />,
-  },
-  {
-    id: 12,
-    path: CONFIRMATION_ROUTE,
-    title: 'ConfirmationPage',
-    element: <ConfirmationPage />,
   },
 ]
 

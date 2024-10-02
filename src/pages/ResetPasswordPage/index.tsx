@@ -1,20 +1,18 @@
 import classNames from 'classnames'
 import { useFormik } from 'formik'
 
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
 
 import { useResetPassword } from '../../hooks/user/useResetPassword'
-import { useUserStore } from '../../store/useUserStore'
 
 type IPasswordValues = Record<string, string>
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate()
   const { mutate: resetPassword } = useResetPassword()
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
 
   const passwordValues: IPasswordValues = {
     oldPassword: '',
@@ -50,10 +48,6 @@ const ResetPasswordPage = () => {
     'bg-blue-600 hover:bg-blue-600': formik.isValid,
     'bg-gray-400': !formik.isValid,
   })
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" />
-  }
 
   const inputs = [
     { id: 0, label: 'Old Password', name: 'oldPassword' },
