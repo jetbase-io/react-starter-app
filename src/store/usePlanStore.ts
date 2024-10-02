@@ -3,20 +3,14 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import { setChosenPlan } from '../helpers/plan'
+import type { IPlan } from '../types/plan.types'
 
 type PlanState = {
-  chosenPlan: {
-    id: string
-    nickname?: string
-    amount: number
-  }
+  chosenPlan: IPlan
 }
 
 type PlanActions = {
-  setChosenPlan: (
-    planId: string,
-    plans: { id: string; nickname?: string; amount: number }[],
-  ) => void
+  setChosenPlan: (planId: string, plans: IPlan[]) => void
 }
 
 export const usePlanStore = create<PlanState & PlanActions>()(

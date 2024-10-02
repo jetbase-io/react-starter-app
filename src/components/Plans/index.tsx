@@ -4,17 +4,18 @@ import { useNavigate } from 'react-router-dom'
 
 import { BILLING_ROUTE } from '../../store/constants/route-constants'
 import { usePlanStore } from '../../store/usePlanStore'
+import type { IPlan } from '../../types/plan.types'
 
 interface IPlansProp {
-  plans: []
-  chosenPlan: any
+  plans: IPlan[]
+  chosenPlan: IPlan
 }
 
 const Plans: FC<IPlansProp> = ({ plans, chosenPlan }) => {
   const navigate = useNavigate()
   const setChosenPlan = usePlanStore(state => state.setChosenPlan)
 
-  const handleSubscribe = (title: string, id: string) => {
+  const handleSubscribe = (id: string) => {
     setChosenPlan(id, plans)
     navigate(BILLING_ROUTE)
   }
@@ -37,7 +38,7 @@ const Plans: FC<IPlansProp> = ({ plans, chosenPlan }) => {
             </h2>
             <button
               type="button"
-              onClick={() => handleSubscribe(nickname, id)}
+              onClick={() => handleSubscribe(id)}
               className="px-12 py-2 mt-12 text-sm font-bold text-center text-white uppercase bg-blue-500 rounded-md xl:px-24 sm:px-16 text-primary-very-light"
             >
               Subscribe

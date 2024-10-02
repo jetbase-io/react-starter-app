@@ -15,7 +15,7 @@ const UpdateUserAvatarPage = () => {
 
   const formik = useFormik({
     initialValues: {
-      image: '',
+      image: null as File | null,
     },
     validationSchema: Yup.object({
       image: Yup.mixed()
@@ -23,17 +23,17 @@ const UpdateUserAvatarPage = () => {
         .test(
           'FILE SIZE',
           'Too Big!',
-          (value: any) => value && value.size < 1024 * 1024,
+          (value: File) => value && value.size < 1024 * 1024,
         )
         .test(
           'FILE TYPE',
           'Invalid!',
-          (value: any) =>
+          (value: File) =>
             value && ['image/png', 'image/jpeg'].includes(value.type),
         ),
     }),
     onSubmit: values => {
-      updateUserAvatar(values.image as unknown as File)
+      updateUserAvatar(values.image as File)
     },
   })
 

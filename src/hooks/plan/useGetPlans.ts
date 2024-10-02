@@ -12,5 +12,5 @@ export const useGetPlans = () => {
     enabled: isAuthenticated,
   })
 
-  return { isLoading, plans: data }
+  return { isLoading, plans: data ?? [] }
 }
