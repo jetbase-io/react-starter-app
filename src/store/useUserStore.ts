@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -33,29 +32,30 @@ export const useUserStore = create<UserState & UserActions>()(
       subscription: { nickname: '', status: STRIPE_INACTIVE_STATUS },
 
       setIsAuthenticated: isAuthenticated =>
-        set(state => {
-          state.isAuthenticated = isAuthenticated
-        }),
+        set(() => ({
+          isAuthenticated,
+        })),
 
       setIsSignedUp: isSuccessful =>
-        set(state => {
-          state.isSignedUp = isSuccessful
-        }),
+        set(() => ({
+          isSignedUp: isSuccessful,
+        })),
 
       setIsConfirmed: isSuccessful =>
-        set(state => {
-          state.isConfirmed = isSuccessful
-        }),
+        set(() => ({
+          isConfirmed: isSuccessful,
+        })),
 
       setSubscription: subscription =>
-        set(state => {
-          state.subscription = subscription
-        }),
+        set(() => ({
+          subscription,
+        })),
 
       logOutUser: () => {
         set(state => {
-          state.isAuthenticated = false
           cleanUserTokensFromLocalStorage()
+
+          return { ...state, isAuthenticated: false }
         })
       },
     })),

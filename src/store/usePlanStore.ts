@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -26,7 +25,7 @@ export const usePlanStore = create<PlanState & PlanActions>()(
 
           setChosenPlan(chosenPlan)
 
-          state.chosenPlan = chosenPlan
+          return { ...state, chosenPlan }
         }),
     })),
   ),
