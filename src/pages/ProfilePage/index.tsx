@@ -14,7 +14,7 @@ const ProfilePage = () => {
   const { mutate: fullSignOut } = useFullSignOut()
   const isAuthenticated = useUserStore(state => state.isAuthenticated)
   const userToken = parseJwt(getAccessToken() || '')
-  const { user } = useUser(userToken.id)
+  const { user } = useUser(userToken?.id)
 
   if (!isAuthenticated) {
     return <Navigate to="/" />

@@ -11,6 +11,12 @@ import { useUserStore } from '../../store/useUserStore'
 
 type IPasswordValues = Record<string, string>
 
+const inputs = [
+  { id: 0, label: 'Old Password', name: 'oldPassword' },
+  { id: 1, label: 'New Password', name: 'newPassword' },
+  { id: 2, label: 'Confirm Password', name: 'confirmPassword' },
+]
+
 const ResetPasswordPage = () => {
   const navigate = useNavigate()
   const { mutate: resetPassword } = useResetPassword()
@@ -54,12 +60,6 @@ const ResetPasswordPage = () => {
   if (!isAuthenticated) {
     return <Navigate to="/" />
   }
-
-  const inputs = [
-    { id: 0, label: 'Old Password', name: 'oldPassword' },
-    { id: 1, label: 'New Password', name: 'newPassword' },
-    { id: 2, label: 'Confirm Password', name: 'confirmPassword' },
-  ]
 
   return (
     <div className="flex flex-col justify-center min-h-screen">

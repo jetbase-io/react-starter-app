@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { UseMutateFunction } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
 import User from '../../services/api/User'
@@ -8,7 +9,12 @@ import { CacheKeys } from '../../constants/cacheKeys'
 import type { UserT } from '../../services/api/User/types'
 import { defaultUserData } from './constants'
 
-export const useUpdateUsername = () => {
+type UpdateUsernameQueryReturnType = {
+  isPending: boolean
+  mutate: UseMutateFunction<string | undefined, Error, string, unknown>
+}
+
+export const useUpdateUsername = (): UpdateUsernameQueryReturnType => {
   const queryClient = useQueryClient()
 
   const { isPending, mutate } = useMutation({

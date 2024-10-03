@@ -1,11 +1,25 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { UseMutateFunction } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
 import User from '../../services/api/User'
 import { CacheKeys } from '../../constants/cacheKeys'
-import type { PaymentMethodsT } from '../../services/api/User/types'
+import type {
+  DetachPaymentMethodPayloadT,
+  PaymentMethodsT,
+} from '../../services/api/User/types'
 
-export const useDetachPaymentMethod = () => {
+type DetachPaymentQueryReturnType = {
+  isPending: boolean
+  mutate: UseMutateFunction<
+    PaymentMethodsT[],
+    Error,
+    DetachPaymentMethodPayloadT,
+    unknown
+  >
+}
+
+export const useDetachPaymentMethod = (): DetachPaymentQueryReturnType => {
   const queryClient = useQueryClient()
 
   const { isPending, mutate } = useMutation({

@@ -1,9 +1,16 @@
 import { useMutation } from '@tanstack/react-query'
+import type { UseMutateFunction } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import User from '../../services/api/User'
 import { useUserStore } from '../../store/useUserStore'
+import type { SignUpPayloadT } from '../../services/api/User/types'
 
-export const useSignUp = () => {
+type SignUpQueryReturnType = {
+  isPending: boolean
+  mutate: UseMutateFunction<string | null, Error, SignUpPayloadT, unknown>
+}
+
+export const useSignUp = (): SignUpQueryReturnType => {
   const setIsSignedUp = useUserStore(state => state.setIsSignedUp)
 
   const { isPending, mutate } = useMutation({
