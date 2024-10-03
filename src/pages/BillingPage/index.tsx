@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { useFormik } from 'formik'
 import type { FC } from 'react'
 
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as Yup from 'yup'
 
@@ -18,7 +18,6 @@ import { useUserStore } from '../../store/useUserStore'
 import type { ActivateSubscriptionResponseT } from '../../services/api/User/types'
 
 const BillingPage: FC = () => {
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
   const setSubscription = useUserStore(state => state.setSubscription)
 
   const { mutate: activateSubscription } = useActivateSubscription()
@@ -89,10 +88,6 @@ const BillingPage: FC = () => {
       })
     },
   })
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" />
-  }
 
   const buttonClass = classNames({
     'bg-blue-600 hover:bg-blue-600': formik.isValid,

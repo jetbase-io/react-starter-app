@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { useFormik } from 'formik'
 import { FC, useEffect } from 'react'
 
-import { Link, Navigate, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import {
@@ -12,13 +12,11 @@ import {
 
 import { useSignIn } from '../../hooks/user/useSignIn'
 import { useConfirm } from '../../hooks/user/useConfirm'
-import { useUserStore } from '../../store/useUserStore'
 
 const TOKEN = 'confirmation_token'
 
 const SignInPage = () => {
   const { search } = useLocation()
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
   const token = new URLSearchParams(search).get(TOKEN)
   const { mutate: signIn } = useSignIn()
   const { mutate: confirm } = useConfirm()
@@ -54,10 +52,6 @@ const SignInPage = () => {
     'bg-blue-600 hover:bg-blue-600': formik.isValid,
     'bg-gray-400': !formik.isValid,
   })
-
-  if (isAuthenticated) {
-    return <Navigate to="/" />
-  }
 
   return (
     <div className="flex flex-col justify-center min-h-screen bg-gray-50">

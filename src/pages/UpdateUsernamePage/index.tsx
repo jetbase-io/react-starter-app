@@ -1,14 +1,10 @@
 import { useFormik } from 'formik'
 
-import { Navigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { useUpdateUsername } from '../../hooks/user/useUpdateUsername'
-import { useUserStore } from '../../store/useUserStore'
 
 const UpdateUsernamePage = () => {
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
-
   const { mutate: updateUsername } = useUpdateUsername()
 
   const formik = useFormik({
@@ -24,10 +20,6 @@ const UpdateUsernamePage = () => {
       updateUsername(values.username)
     },
   })
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" />
-  }
 
   return (
     <div className="flex flex-col justify-center min-h-screen">

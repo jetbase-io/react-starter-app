@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import Placeholder from '../SignUpPage/Placeholder'
 import { useConfirm } from '../../hooks/user/useConfirm'
@@ -13,7 +13,6 @@ const ConfirmationPage = () => {
   const token = new URLSearchParams(search).get(TOKEN)
   const navigate = useNavigate()
   const { mutate: confirm } = useConfirm()
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
   const isConfirmed = useUserStore(state => state.isConfirmed)
 
   useEffect(() => {
@@ -24,10 +23,6 @@ const ConfirmationPage = () => {
 
   const handleClick = () => {
     return navigate('/')
-  }
-
-  if (isAuthenticated) {
-    return <Navigate to="/" />
   }
 
   return (

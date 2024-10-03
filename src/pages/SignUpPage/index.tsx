@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 
-import { Navigate, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import SignUpForm from './SignUpForm'
 import Placeholder from './Placeholder'
 
@@ -10,15 +10,10 @@ import { useUserStore } from '../../store/useUserStore'
 const SignUpPage: FC = () => {
   const navigate = useNavigate()
   const { mutate: signUp } = useSignUp()
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
   const isSignedUp = useUserStore(state => state.isSignedUp)
 
   const handleClick = () => {
     return navigate('/')
-  }
-
-  if (isAuthenticated) {
-    return <Navigate to="/" />
   }
 
   return (

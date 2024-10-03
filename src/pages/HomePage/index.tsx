@@ -1,21 +1,4 @@
-import { useEffect } from 'react'
-
-import { useNavigate } from 'react-router'
-
-import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
-
-import { useUserStore } from '../../store/useUserStore'
-
 const HomePage = () => {
-  const navigate = useNavigate()
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate(SIGN_IN_ROUTE)
-    }
-  }, [isAuthenticated, navigate])
-
   return (
     <div className="pb-10 mx-auto mt-10 rounded-lg shadow-xl">
       <div className="flex justify-center items-center h-[250px]">
