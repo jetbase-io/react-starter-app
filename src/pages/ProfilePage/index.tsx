@@ -1,4 +1,4 @@
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getAccessToken, parseJwt } from '../../helpers/user'
 import {
   PROFILE_ROUTE_UPDATE_USERNAME,
@@ -8,17 +8,11 @@ import {
 
 import { useFullSignOut } from '../../hooks/user/useFullSignOut'
 import { useUser } from '../../hooks/user/useUser'
-import { useUserStore } from '../../store/useUserStore'
 
 const ProfilePage = () => {
   const { mutate: fullSignOut } = useFullSignOut()
-  const isAuthenticated = useUserStore(state => state.isAuthenticated)
   const userToken = parseJwt(getAccessToken() || '')
   const { user } = useUser(userToken.id)
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" />
-  }
 
   return (
     <section className="relative py-16">
