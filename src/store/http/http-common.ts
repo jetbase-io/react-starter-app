@@ -9,7 +9,7 @@ import {
   setUserTokensToLocalStorage,
 } from '../../helpers/user'
 import { REFRESH_TOKEN_URL } from '../constants/api-contstants'
-import { SIGN_IN_ROUTE } from '../constants/route-constants'
+import { useUserStore } from '../useUserStore'
 
 const baseURL = import.meta.env.VITE_API_URL
 
@@ -19,17 +19,17 @@ http.interceptors.request.use(
   async (config: AxiosRequestConfig) => {
     const accessToken = getAccessToken()
 
-    if (config.headers === undefined) {
-      // eslint-disable-next-line no-param-reassign
-      config.headers = {}
-    }
+    const localConfig: AxiosRequestConfig = { ...config }
+
+    localConfig.headers = config.headers ?? {}
 
     if (accessToken) {
-      // eslint-disable-next-line no-param-reassign
-      config.headers.Authorization = accessToken ? `Bearer ${accessToken}` : ''
+      localConfig.headers.Authorization = accessToken
+        ? `Bearer ${accessToken}`
+        : ''
     }
 
-    return config
+    return localConfig
   },
   error => error,
 )
@@ -55,20 +55,17 @@ http.interceptors.response.use(
           response.data.accessToken,
           response.data.refreshToken,
         )
-        // eslint-disable-next-line no-param-reassign
-        error.config.headers = {
+        const headers = {
           ...error.config.headers,
           Authorization: `Bearer ${response.data.accessToken}`,
         }
 
         if (response.data.accessToken?.length) refresh = false
 
-        return await http.request(error.config)
+        return await http.request({ ...error.config, headers })
       } catch (er) {
         cleanUserTokensFromLocalStorage()
-
-        // eslint-disable-next-line no-return-assign
-        return (window.location.href = SIGN_IN_ROUTE)
+        useUserStore.setState({ isAuthenticated: false })
       }
     }
 
