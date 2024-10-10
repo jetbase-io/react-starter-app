@@ -15,6 +15,7 @@ import { useDetachPaymentMethod } from '../../hooks/user/useDetachPaymentMethod'
 import { useActivateSubscription } from '../../hooks/user/useActivateSubscription'
 
 import { useUserStore } from '../../store/useUserStore'
+import type { ActivateSubscriptionResponseT } from '../../services/api/User/types'
 
 const BillingPage: FC = () => {
   const setSubscription = useUserStore(state => state.setSubscription)
@@ -29,11 +30,7 @@ const BillingPage: FC = () => {
   const { paymentMethods } = useGetPaymentMethods()
   const { mutate: detachPaymentMethod } = useDetachPaymentMethod()
 
-  const handleResultData = (resultData: {
-    clientSecret: string
-    status: string
-    nickname: string | null
-  }) => {
+  const handleResultData = (resultData: ActivateSubscriptionResponseT) => {
     if (!stripe || !elements) {
       return
     }

@@ -12,7 +12,7 @@ import { useUser } from '../../hooks/user/useUser'
 const ProfilePage = () => {
   const { mutate: fullSignOut } = useFullSignOut()
   const userToken = parseJwt(getAccessToken() || '')
-  const { user } = useUser(userToken.id)
+  const { user } = useUser(userToken?.id)
 
   return (
     <section className="relative py-16">

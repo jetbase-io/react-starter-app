@@ -14,6 +14,7 @@ import {
   UPDATE_USER_AVATAR,
 } from '../../../store/constants/api-contstants'
 import http from '../../../store/http/http-common'
+import type { IMessageResponse } from '../../../types/responses.types'
 import type {
   ActivateSubscriptionPayloadT,
   ActivateSubscriptionResponseT,
@@ -155,16 +156,12 @@ class User {
     return data
   }
 
-  async confirm(token: string) {
-    const result = await http.patch(CONFIRMATION_URL, { token })
-    const responseText = result.request?.responseText
-    const response = responseText?.length ? JSON.parse(responseText) : null
+  async confirm(token: string): Promise<string> {
+    const result = await http.patch<IMessageResponse>(CONFIRMATION_URL, {
+      token,
+    })
 
-    if (result.request.status === 200) {
-      return response?.message
-    }
-
-    throw new Error(response?.message?.toString())
+    return result.data.message
   }
 
   async checkSubscription(): Promise<CheckSubscriptionResponseT> {

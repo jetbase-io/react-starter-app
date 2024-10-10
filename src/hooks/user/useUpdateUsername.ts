@@ -1,15 +1,22 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { UseMutateFunction } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router'
 import User from '../../services/api/User'
-import history from '../../helpers/history'
 import { HOME_ROUTE } from '../../store/constants/route-constants'
 import { CacheKeys } from '../../constants/cacheKeys'
 import type { UserT } from '../../services/api/User/types'
 import { defaultUserData } from './constants'
 
-export const useUpdateUsername = () => {
+type UpdateUsernameQueryReturnType = {
+  isPending: boolean
+  mutate: UseMutateFunction<string | undefined, Error, string, unknown>
+}
+
+export const useUpdateUsername = (): UpdateUsernameQueryReturnType => {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const { isPending, mutate } = useMutation({
     mutationFn: User.updateUsername,
@@ -22,7 +29,7 @@ export const useUpdateUsername = () => {
         )
       }
 
-      history.push(HOME_ROUTE)
+      navigate(HOME_ROUTE)
     },
     onError: ({ message }) => {
       toast.error(message)

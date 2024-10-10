@@ -1,4 +1,6 @@
-export const cleanUserTokensFromLocalStorage = () => {
+import type { UserT } from '../services/api/User/types'
+
+export const cleanUserTokensFromLocalStorage = (): void => {
   localStorage.removeItem('accessToken')
   localStorage.removeItem('refreshToken')
 }
@@ -6,18 +8,21 @@ export const cleanUserTokensFromLocalStorage = () => {
 export const setUserTokensToLocalStorage = (
   accessToken: string,
   refreshToken: string,
-) => {
+): void => {
   localStorage.setItem('accessToken', accessToken)
   localStorage.setItem('refreshToken', refreshToken)
 }
 
-export const getIsAuthenticated = () => !!localStorage.getItem('accessToken')
+export const getIsAuthenticated = (): boolean =>
+  !!localStorage.getItem('accessToken')
 
-export const getAccessToken = () => localStorage.getItem('accessToken')
+export const getAccessToken = (): string | null =>
+  localStorage.getItem('accessToken')
 
-export const getRefreshToken = () => localStorage.getItem('refreshToken')
+export const getRefreshToken = (): string | null =>
+  localStorage.getItem('refreshToken')
 
-export const parseJwt = (token: string) => {
+export const parseJwt = (token: string): Pick<UserT, 'id'> | null => {
   try {
     if (!token?.length) return null
 
