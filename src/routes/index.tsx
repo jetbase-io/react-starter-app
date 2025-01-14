@@ -3,7 +3,7 @@ import { Outlet, Route, Routes } from 'react-router'
 import routes, {
   privateRoutes,
   publicOnlyRoutes,
-} from '../common/constants/route-pages-constants'
+} from './route-pages-constants'
 import { NotFoundPage } from '../pages'
 import { PublicOnlyOutlet } from './components/PublicOnlyOutlet'
 import { PrivateOutlet } from './components/PrivateOutlet'

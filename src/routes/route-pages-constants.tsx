@@ -9,11 +9,11 @@ import {
   SignUpPage,
   UpdateUserAvatarPage,
   UpdateUsernamePage,
-} from '../../pages'
-import ConfirmationPage from '../../pages/ConfirmationPage'
-import ContactUsPage from '../../pages/CountactUs'
-import ForgotPasswordPage from '../../pages/ForgotPasswordPage'
-import PlansPage from '../../pages/PlansPage'
+} from '../pages'
+import ConfirmationPage from '../pages/ConfirmationPage'
+import ContactUsPage from '../pages/CountactUs'
+import ForgotPasswordPage from '../pages/ForgotPasswordPage'
+import PlansPage from '../pages/PlansPage'
 import {
   BILLING_ROUTE,
   FORGOT_PASSWORD_ROUTE,
@@ -26,8 +26,8 @@ import {
   CONTACT_US_ROUTE,
   PLANS_ROUTE,
   CONFIRMATION_ROUTE,
-} from './route-constants'
-import type { Page } from '../types/page.types'
+} from '../common/constants/route-constants'
+import type { Page } from '../common/types/page.types'
 
 // public routes
 const routes: Page[] = [
