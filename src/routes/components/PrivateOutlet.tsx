@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
+import { SIGN_IN_ROUTE } from '../../common/constants/route-constants'
 import { useUserStore } from '../../store/useUserStore'
 
 export const PrivateOutlet = () => {

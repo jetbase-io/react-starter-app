@@ -7,15 +7,16 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as Yup from 'yup'
 
-import { getChosenPlan } from '../../helpers/plan'
-import { HOME_ROUTE } from '../../store/constants/route-constants'
+import { getChosenPlan } from '../../common/utils/plan'
+import { HOME_ROUTE } from '../../common/constants/route-constants'
 
 import { useGetPaymentMethods } from '../../hooks/user/useGetPaymentMethods'
 import { useDetachPaymentMethod } from '../../hooks/user/useDetachPaymentMethod'
 import { useActivateSubscription } from '../../hooks/user/useActivateSubscription'
 
 import { useUserStore } from '../../store/useUserStore'
-import type { ActivateSubscriptionResponseT } from '../../services/api/User/types'
+import type { ActivateSubscriptionResponseT } from '../../api/User/types'
+import { Button } from '../../components/Button'
 
 const BillingPage: FC = () => {
   const setSubscription = useUserStore(state => state.setSubscription)
@@ -163,12 +164,9 @@ const BillingPage: FC = () => {
               <CardElement className="w-full p-2 mt-1 border border-gray-300 rounded" />
             </div>
             <div>
-              <button
-                type="submit"
-                className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}
-              >
+              <Button type="submit" className={`${buttonClass}`}>
                 Pay
-              </button>
+              </Button>
             </div>
           </form>
         </div>

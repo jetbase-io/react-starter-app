@@ -2,16 +2,18 @@ import classNames from 'classnames'
 import { useFormik } from 'formik'
 import { FC, useEffect } from 'react'
 
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import {
   FORGOT_PASSWORD_ROUTE,
   SIGN_UP_ROUTE,
-} from '../../store/constants/route-constants'
+} from '../../common/constants/route-constants'
 
 import { useSignIn } from '../../hooks/user/useSignIn'
 import { useConfirm } from '../../hooks/user/useConfirm'
+import { Link } from '../../components/Link'
+import { Button } from '../../components/Button'
 
 const TOKEN = 'confirmation_token'
 
@@ -96,25 +98,12 @@ const SignInPage = () => {
             ) : null}
           </div>
           <div>
-            <button
-              type="submit"
-              className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}
-            >
+            <Button type="submit" className={`${buttonClass}`}>
               Sign In
-            </button>
+            </Button>
             <div className="flex justify-between mt-5">
-              <Link
-                className="text-blue-400 font-small dark:text-blue-500 hover:underline"
-                to={SIGN_UP_ROUTE}
-              >
-                Don't have an account?
-              </Link>
-              <Link
-                className="text-blue-400 font-small dark:text-blue-500 hover:underline"
-                to={FORGOT_PASSWORD_ROUTE}
-              >
-                Forgot password?
-              </Link>
+              <Link to={SIGN_UP_ROUTE}>Don't have an account?</Link>
+              <Link to={FORGOT_PASSWORD_ROUTE}>Forgot password?</Link>
             </div>
           </div>
         </form>

@@ -1,0 +1,79 @@
+import type { AxiosRequestConfig } from 'axios'
+
+import axios from 'axios'
+
+import {
+  cleanUserTokensFromLocalStorage,
+  getAccessToken,
+  getRefreshToken,
+  setUserTokensToLocalStorage,
+} from '../common/utils/user'
+import { REFRESH_TOKEN_URL } from '../common/constants/api-contstants'
+import { useUserStore } from '../store/useUserStore'
+import { appEnvConfig } from '../common/config/app-env.config'
+
+const baseURL = appEnvConfig.api_url
+
+const http = axios.create({ baseURL })
+
+http.interceptors.request.use(
+  async (config: AxiosRequestConfig) => {
+    const accessToken = getAccessToken()
+
+    const localConfig: AxiosRequestConfig = { ...config }
+
+    localConfig.headers = config.headers ?? {}
+
+    if (accessToken) {
+      localConfig.headers.Authorization = accessToken
+        ? `Bearer ${accessToken}`
+        : ''
+    }
+
+    return localConfig
+  },
+  error => error,
+)
+
+let refresh = false
+
+http.interceptors.response.use(
+  resp => resp,
+  async error => {
+    if (error?.response?.status === 401 && !refresh) {
+      refresh = true
+      try {
+        const response = await axios.post(
+          `${baseURL}${REFRESH_TOKEN_URL}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${getRefreshToken()}`,
+            },
+          },
+        )
+        setUserTokensToLocalStorage(
+          response.data.accessToken,
+          response.data.refreshToken,
+        )
+        const headers = {
+          ...error.config.headers,
+          Authorization: `Bearer ${response.data.accessToken}`,
+        }
+
+        if (response.data.accessToken?.length) refresh = false
+
+        return await http.request({ ...error.config, headers })
+      } catch (er) {
+        cleanUserTokensFromLocalStorage()
+        useUserStore.setState({ isAuthenticated: false })
+      }
+    }
+
+    refresh = false
+
+    return error
+  },
+)
+
+export default http

@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { HOME_ROUTE } from '../../store/constants/route-constants'
+import { HOME_ROUTE } from '../../common/constants/route-constants'
 import { useUserStore } from '../../store/useUserStore'
 
 export const PublicOnlyOutlet = () => {

@@ -2,11 +2,12 @@ import type { FC } from 'react'
 
 import classNames from 'classnames'
 import { useFormik } from 'formik'
-import { Link } from 'react-router-dom'
 import * as Yup from 'yup'
 
-import { SIGN_IN_ROUTE } from '../../../store/constants/route-constants'
-import type { SignUpPayloadT } from '../../../services/api/User/types'
+import { SIGN_IN_ROUTE } from '../../../common/constants/route-constants'
+import type { SignUpPayloadT } from '../../../api/User/types'
+import { Link } from '../../../components/Link'
+import { Button } from '../../../components/Button'
 
 interface IProps {
   handleSignUp: (data: SignUpPayloadT) => void
@@ -135,19 +136,11 @@ const SignUpForm: FC<IProps> = ({ handleSignUp }) => {
           ) : null}
         </div>
         <div>
-          <button
-            type="submit"
-            className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}
-          >
+          <Button type="submit" className={`${buttonClass}`}>
             Sign Up
-          </button>
+          </Button>
           <div className="flex justify-center mt-5">
-            <Link
-              className="text-blue-400 font-small dark:text-blue-500 hover:underline"
-              to={SIGN_IN_ROUTE}
-            >
-              Already have an account?
-            </Link>
+            <Link to={SIGN_IN_ROUTE}>Already have an account?</Link>
           </div>
         </div>
       </form>

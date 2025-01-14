@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import { getAccessToken, parseJwt } from '../../helpers/user'
+import { getAccessToken, parseJwt } from '../../common/utils/user'
 import {
   PROFILE_ROUTE_UPDATE_USERNAME,
   PROFILE_ROUTE_UPDATE_USER_AVATAR,
   RESET_PASSWORD_ROUTE,
-} from '../../store/constants/route-constants'
+} from '../../common/constants/route-constants'
 
 import { useFullSignOut } from '../../hooks/user/useFullSignOut'
 import { useUser } from '../../hooks/user/useUser'
@@ -46,7 +46,7 @@ const ProfilePage = () => {
                   Reset Password
                 </Link>
                 <span
-                  onClick={() => fullSignOut()}
+                  onClick={fullSignOut}
                   className="font-normal text-pink-500 cursor-pointer"
                 >
                   Full Sign Out

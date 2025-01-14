@@ -1,4 +1,4 @@
-import type { UserT } from '../../services/api/User/types'
+import type { UserT } from '../../api/User/types'
 
 export const defaultUserData: UserT = {
   avatar: null,
