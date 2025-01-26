@@ -5,6 +5,7 @@ import React, { FC, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
+  CHAT_ROUTE,
   CONTACT_US_ROUTE,
   PLANS_ROUTE,
   PROFILE_ROUTE,
@@ -33,6 +34,12 @@ const Header = () => {
       id: 2,
       text: 'My Profile',
       to: PROFILE_ROUTE,
+      isVisible: isAuthenticated,
+    },
+    {
+      id: 4,
+      text: 'Chats',
+      to: CHAT_ROUTE,
       isVisible: isAuthenticated,
     },
   ]

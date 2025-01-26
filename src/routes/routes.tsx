@@ -9,6 +9,7 @@ import {
   SignUpPage,
   UpdateUserAvatarPage,
   UpdateUsernamePage,
+  ChatPage,
 } from '../pages'
 import ConfirmationPage from '../pages/ConfirmationPage'
 import ContactUsPage from '../pages/CountactUs'
@@ -26,6 +27,7 @@ import {
   CONTACT_US_ROUTE,
   PLANS_ROUTE,
   CONFIRMATION_ROUTE,
+  CHAT_ROUTE,
 } from '../store/constants/route-constants'
 
 export interface Page {
@@ -120,6 +122,12 @@ export const privateRoutes: Page[] = [
     path: PLANS_ROUTE,
     title: 'PlansPage',
     element: <PlansPage />,
+  },
+  {
+    id: 8,
+    path: CHAT_ROUTE,
+    title: 'ChatPage',
+    element: <ChatPage />,
   },
 ]
 

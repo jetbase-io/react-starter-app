@@ -7,6 +7,7 @@ import SignInPage from './SignInPage'
 import SignUpPage from './SignUpPage'
 import UpdateUserAvatarPage from './UpdateUserAvatarPage'
 import UpdateUsernamePage from './UpdateUsernamePage'
+import ChatPage from './ChatPage'
 
 export {
   BillingPage,
@@ -18,4 +19,5 @@ export {
   SignUpPage,
   UpdateUserAvatarPage,
   UpdateUsernamePage,
+  ChatPage,
 }
