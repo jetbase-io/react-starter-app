@@ -8,6 +8,7 @@ interface Message {
   id: string
   content: string
   timestamp: string
+  imageUrls: string[]
   user: {
     id: string
     username: string
@@ -25,16 +26,19 @@ const ChatsPage = () => {
   const [message, setMessage] = useState('')
   const [chatId, setChatId] = useState('')
   const [socket, setSocket] = useState<Socket | null>(null)
+  const [files, setFiles] = useState<File[]>([])
+  const [error, setError] = useState<string | null>(null)
 
   const token = getAccessToken()
   const userToken = parseJwt(token || '')
   const { user } = useUser(userToken?.id)
 
-  // Ініціалізація WebSocket
   useEffect(() => {
-    if (!user) return
+    if (!user || socket) {
+      return undefined
+    }
 
-    const newSocket = io('http://localhost:3000', {
+    const newSocket = io('http://localhost:3003', {
       transports: ['websocket'],
       query: { token },
     })
@@ -42,26 +46,20 @@ const ChatsPage = () => {
     setSocket(newSocket)
 
     newSocket.on('message', data => {
-      setMessages(prevMessages => [
-        ...prevMessages,
-        {
-          id: data.id,
-          content: data.content,
-          timestamp: data.timestamp,
-          user: data.user,
-        },
-      ])
+      setMessages(prevMessages => {
+        if (prevMessages.some(msg => msg.id === data.id)) return prevMessages
+
+        return [...prevMessages, data]
+      })
     })
 
-    // eslint-disable-next-line consistent-return
     return () => {
       newSocket.disconnect()
     }
-  }, [user, token])
+  }, [user, token, socket])
 
-  // Завантаження чатів
   useEffect(() => {
-    fetch('http://localhost:3000/api/chats', {
+    fetch('http://localhost:3003/api/chats', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,7 +76,7 @@ const ChatsPage = () => {
     if (socket) {
       socket.emit('joinChat', chatId)
 
-      fetch(`http://localhost:3000/api/messages/${chatId}`, {
+      fetch(`http://localhost:3003/api/chats/messages/${chatId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -89,16 +87,47 @@ const ChatsPage = () => {
     }
   }
 
-  // Відправка повідомлення
-  const sendMessage = () => {
-    if (socket && message.trim() !== '' && user) {
-      socket.emit('message', {
-        chatId,
-        userId: user.id,
-        message,
-      })
+  const sendMessage = async () => {
+    if (!socket || !user || (message.trim() === '' && files.length === 0)) {
+      setError('Please enter a message or upload a file')
+
+      return
+    }
+
+    setError(null)
+
+    const formData = new FormData()
+    formData.append('chatId', chatId)
+    formData.append('content', message)
+    formData.append('userId', user.id)
+    files.forEach(file => formData.append('files', file))
+
+    try {
+      const response = await fetch(
+        `http://localhost:3003/api/chats/messages/${chatId}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      )
+
+      const data = await response.json()
+
+      // socket.emit('message', {
+      //   chatId,
+      //   userId: user.id,
+      //   message: data.content,
+      //   imageUrls: data.imageUrls,
+      // })
 
       setMessage('')
+      setFiles([])
+    } catch (error) {
+      setError('Failed to send the message')
+      console.error('Error sending message:', error)
     }
   }
 
@@ -144,10 +173,10 @@ const ChatsPage = () => {
                         msg.user.id === user?.id
                           ? 'justify-end'
                           : 'justify-start'
-                      } mb-2`}
+                      } mb-4`}
                     >
                       <div
-                        className={`p-3 rounded-lg max-w-xs ${
+                        className={`p-3 rounded-lg max-w-sm ${
                           msg.user.id === user?.id
                             ? 'bg-blue-500 text-white'
                             : 'bg-gray-200 text-gray-800'
@@ -156,8 +185,20 @@ const ChatsPage = () => {
                         <p className="text-sm font-semibold mb-1">
                           {msg.user.username}
                         </p>
-                        <p>{msg.content}</p>
-                        <p className="text-xs text-gray-500 mt-1">
+                        {msg.content && <p className="mb-2">{msg.content}</p>}
+                        {msg.imageUrls?.length > 0 && (
+                          <div className="grid grid-cols-2 gap-2 mt-2">
+                            {msg.imageUrls.map((url, index) => (
+                              <img
+                                key={index}
+                                src={url}
+                                alt="attachment"
+                                className="w-32 h-32 object-cover rounded-md"
+                              />
+                            ))}
+                          </div>
+                        )}
+                        <p className="text-xs text-gray-500 mt-2">
                           {new Date(msg.timestamp).toLocaleTimeString()}
                         </p>
                       </div>
@@ -169,6 +210,12 @@ const ChatsPage = () => {
               </div>
 
               <div className="flex space-x-2">
+                <input
+                  type="file"
+                  multiple
+                  onChange={e => setFiles(Array.from(e.target.files || []))}
+                  className="p-2 border rounded-md text-sm"
+                />
                 <input
                   type="text"
                   value={message}
@@ -183,6 +230,28 @@ const ChatsPage = () => {
                   Send
                 </button>
               </div>
+              {files.length > 0 && (
+                <div className="mt-4 grid grid-cols-3 gap-2">
+                  {files.map((file, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt="preview"
+                        className="w-20 h-20 object-cover rounded-md"
+                      />
+                      <button
+                        onClick={() =>
+                          setFiles(prev => prev.filter((_, i) => i !== index))
+                        }
+                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {error && <p className="text-red-500 mt-2">{error}</p>}
             </>
           ) : (
             <p className="text-gray-500">
