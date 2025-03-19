@@ -2,11 +2,11 @@ import { useMutation } from '@tanstack/react-query'
 import type { UseMutateFunction } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
-import User from '../../services/api/User'
+import User from '../../api/User'
 import type {
   ActivateSubscriptionPayloadT,
   ActivateSubscriptionResponseT,
-} from '../../services/api/User/types'
+} from '../../api/User/types'
 
 type ActivateSubscriptionQueryReturnType = {
   isPending: boolean

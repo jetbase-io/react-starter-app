@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
 import type { UseMutateFunction } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import User from '../../services/api/User'
+import User from '../../api/User'
 import { useUserStore } from '../../store/useUserStore'
-import type { SignUpPayloadT } from '../../services/api/User/types'
+import type { SignUpPayloadT } from '../../api/User/types'
 
 type SignUpQueryReturnType = {
   isPending: boolean

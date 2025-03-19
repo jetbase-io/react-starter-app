@@ -1,6 +1,5 @@
 import classNames from 'classnames'
-import PropTypes from 'prop-types'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Link } from 'react-router-dom'
 
@@ -8,10 +7,7 @@ import {
   CONTACT_US_ROUTE,
   PLANS_ROUTE,
   PROFILE_ROUTE,
-  RESET_PASSWORD_ROUTE,
-  SIGN_IN_ROUTE,
-  SIGN_UP_ROUTE,
-} from '../../store/constants/route-constants'
+} from '../../common/constants/route-constants'
 
 import HeaderLink from '../HeaderLink'
 import { useSignOut } from '../../hooks/user/useSignOut'

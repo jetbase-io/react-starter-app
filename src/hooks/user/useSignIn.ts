@@ -2,13 +2,13 @@ import { useMutation } from '@tanstack/react-query'
 import type { UseMutateFunction } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
-import User from '../../services/api/User'
-import { setUserTokensToLocalStorage } from '../../helpers/user'
+import User from '../../api/User'
+import { setUserTokensToLocalStorage } from '../../common/utils/user'
 import { useUserStore } from '../../store/useUserStore'
 import type {
   SignInPayloadT,
   SignInResponseT,
-} from '../../services/api/User/types'
+} from '../../api/User/types'
 
 type SignInQueryReturnType = {
   isPending: boolean

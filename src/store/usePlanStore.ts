@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
-import { setChosenPlan } from '../helpers/plan'
-import type { IPlan } from '../types/plan.types'
-import { empyChoosenPlan } from '../constants'
+import { setChosenPlan } from '../common/utils/plan'
+import type { IPlan } from '../common/types/plan.types'
+import { empyChoosenPlan } from '../common/constants'
 
 type PlanState = {
   chosenPlan: IPlan

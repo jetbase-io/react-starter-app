@@ -4,9 +4,10 @@ import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
-import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
+import { SIGN_IN_ROUTE } from '../../common/constants/route-constants'
 
 import { useResetPassword } from '../../hooks/user/useResetPassword'
+import { Button } from '../../components/Button'
 
 type IPasswordValues = Record<string, string>
 
@@ -87,12 +88,9 @@ const ResetPasswordPage = () => {
             </div>
           ))}
           <div>
-            <button
-              type="submit"
-              className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}
-            >
+            <Button type="submit" className={`${buttonClass}`}>
               Reset
-            </button>
+            </Button>
           </div>
         </form>
       </div>

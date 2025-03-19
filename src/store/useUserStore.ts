@@ -4,9 +4,9 @@ import { immer } from 'zustand/middleware/immer'
 import {
   cleanUserTokensFromLocalStorage,
   getIsAuthenticated,
-} from '../helpers/user'
+} from '../common/utils/user'
 
-import { STRIPE_INACTIVE_STATUS } from './constants/stripe-constants'
+import { STRIPE_INACTIVE_STATUS } from '../common/constants/stripe-constants'
 
 type UserState = {
   isAuthenticated: boolean

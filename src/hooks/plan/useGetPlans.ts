@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { CacheKeys } from '../../constants/cacheKeys'
-import Plan from '../../services/api/Plan'
+import { CacheKeys } from '../../common/constants/cacheKeys'
 import { useUserStore } from '../../store/useUserStore'
-import type { IPlan } from '../../types/plan.types'
+import type { IPlan } from '../../common/types/plan.types'
+import Plan from '../../api/Plan'
 
 type GetPlansQueryReturnType = {
   isLoading: boolean

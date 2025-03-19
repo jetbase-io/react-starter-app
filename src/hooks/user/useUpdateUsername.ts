@@ -3,10 +3,10 @@ import type { UseMutateFunction } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router'
-import User from '../../services/api/User'
-import { HOME_ROUTE } from '../../store/constants/route-constants'
-import { CacheKeys } from '../../constants/cacheKeys'
-import type { UserT } from '../../services/api/User/types'
+import User from '../../api/User'
+import { HOME_ROUTE } from '../../common/constants/route-constants'
+import { CacheKeys } from '../../common/constants/cacheKeys'
+import type { UserT } from '../../api/User/types'
 import { defaultUserData } from './constants'
 
 type UpdateUsernameQueryReturnType = {

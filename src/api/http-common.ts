@@ -7,11 +7,12 @@ import {
   getAccessToken,
   getRefreshToken,
   setUserTokensToLocalStorage,
-} from '../../helpers/user'
-import { REFRESH_TOKEN_URL } from '../constants/api-contstants'
-import { useUserStore } from '../useUserStore'
+} from '../common/utils/user'
+import { REFRESH_TOKEN_URL } from '../common/constants/api-contstants'
+import { useUserStore } from '../store/useUserStore'
+import { appEnvConfig } from '../common/config/app-env.config'
 
-const baseURL = import.meta.env.VITE_API_URL
+const baseURL = appEnvConfig.api_url
 
 const http = axios.create({ baseURL })
 

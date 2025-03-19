@@ -1,4 +1,4 @@
-import { getRefreshToken } from '../../../helpers/user'
+import { getRefreshToken } from '../../common/utils/user'
 import {
   ACTIVATE_SUBSCRIPTION_URL,
   CHECK_SUBSCRIPTION_URL,
@@ -12,9 +12,9 @@ import {
   SIGN_UP_URL,
   UPDATE_USERNAME,
   UPDATE_USER_AVATAR,
-} from '../../../store/constants/api-contstants'
-import http from '../../../store/http/http-common'
-import type { IMessageResponse } from '../../../types/responses.types'
+} from '../../common/constants/api-contstants'
+import http from '../http-common'
+import type { IMessageResponse } from '../../common/types/responses.types'
 import type {
   ActivateSubscriptionPayloadT,
   ActivateSubscriptionResponseT,

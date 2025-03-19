@@ -2,12 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { UseMutateFunction } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
-import User from '../../services/api/User'
-import { CacheKeys } from '../../constants/cacheKeys'
+import User from '../../api/User'
+import { CacheKeys } from '../../common/constants/cacheKeys'
 import type {
   DetachPaymentMethodPayloadT,
   PaymentMethodsT,
-} from '../../services/api/User/types'
+} from '../../api/User/types'
 
 type DetachPaymentQueryReturnType = {
   isPending: boolean

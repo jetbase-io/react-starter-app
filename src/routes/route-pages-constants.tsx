@@ -26,17 +26,10 @@ import {
   CONTACT_US_ROUTE,
   PLANS_ROUTE,
   CONFIRMATION_ROUTE,
-} from '../store/constants/route-constants'
-
-export interface Page {
-  id: number
-  path: string
-  title: string
-  element: React.ReactElement
-}
+} from '../common/constants/route-constants'
+import type { Page } from '../common/types/page.types'
 
 // public routes
-
 const routes: Page[] = [
   {
     id: 1,
@@ -47,7 +40,6 @@ const routes: Page[] = [
 ]
 
 // public routes that can't be accessed by authorized user
-
 export const publicOnlyRoutes: Page[] = [
   {
     id: 1,
@@ -77,7 +69,6 @@ export const publicOnlyRoutes: Page[] = [
 ]
 
 // private routes that can't be accessed by non-authorized user
-
 export const privateRoutes: Page[] = [
   {
     id: 1,

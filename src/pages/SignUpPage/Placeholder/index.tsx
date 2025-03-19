@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { Button } from '../../../components/Button'
 
 interface IProps {
   title: string
@@ -13,12 +14,9 @@ const Placeholder: FC<IProps> = ({ title, message, btnTitle, onClick }) => {
       <h1 className="text-xl">{title}</h1>
       <p>{message}</p>
       <br />
-      <button
-        className="bg-blue-600 hover:bg-blue-600 w-full py-2 px-4 rounded-md text-white text-sm"
-        onClick={onClick}
-      >
+      <Button className="bg-blue-600 hover:bg-blue-600" onClick={onClick}>
         {btnTitle}
-      </button>
+      </Button>
     </div>
   )
 }

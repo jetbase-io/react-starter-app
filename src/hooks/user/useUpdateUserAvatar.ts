@@ -2,8 +2,8 @@ import { useMutation } from '@tanstack/react-query'
 import type { UseMutateFunction } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router'
-import User from '../../services/api/User'
-import { HOME_ROUTE } from '../../store/constants/route-constants'
+import User from '../../api/User'
+import { HOME_ROUTE } from '../../common/constants/route-constants'
 
 type UpdateUserAvatarQueryReturnType = {
   isPending: boolean

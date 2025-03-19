@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import User from '../../services/api/User'
-import { CacheKeys } from '../../constants/cacheKeys'
-import type { UserT } from '../../services/api/User/types'
+import User from '../../api/User'
+import { CacheKeys } from '../../common/constants/cacheKeys'
+import type { UserT } from '../../api/User/types'
 
 type UserQueryReturnType = {
   isLoading: boolean

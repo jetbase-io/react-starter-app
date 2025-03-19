@@ -1,10 +1,12 @@
 import classNames from 'classnames'
 import { useFormik } from 'formik'
 
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
-import { SIGN_IN_ROUTE } from '../../store/constants/route-constants'
+import { SIGN_IN_ROUTE } from '../../common/constants/route-constants'
+import { Link } from '../../components/Link'
+import { Button } from '../../components/Button'
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate()
@@ -58,19 +60,11 @@ const ForgotPasswordPage = () => {
             )}
           </div>
           <div>
-            <button
-              type="submit"
-              className={`${buttonClass} w-full py-2 px-4 rounded-md text-white text-sm`}
-            >
+            <Button type="submit" className={`${buttonClass}`}>
               Send
-            </button>
+            </Button>
             <div className="flex justify-center mt-5">
-              <Link
-                className="text-blue-400 font-small dark:text-blue-500 hover:underline"
-                to={SIGN_IN_ROUTE}
-              >
-                Already have an account?
-              </Link>
+              <Link to={SIGN_IN_ROUTE}>Already have an account?</Link>
             </div>
           </div>
         </form>

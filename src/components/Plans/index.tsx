@@ -2,9 +2,9 @@ import type { FC } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
-import { BILLING_ROUTE } from '../../store/constants/route-constants'
+import { BILLING_ROUTE } from '../../common/constants/route-constants'
 import { usePlanStore } from '../../store/usePlanStore'
-import type { IPlan } from '../../types/plan.types'
+import type { IPlan } from '../../common/types/plan.types'
 
 interface IPlansProp {
   plans: IPlan[]
