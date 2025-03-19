@@ -1,11 +1,9 @@
 import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
 import postcss from './postcss.config'
-import { manifest } from './src/common/config/manifest.js'
 
 export default defineConfig({
-  plugins: [react(), VitePWA(manifest)],
+  plugins: [react()],
   css: {
     postcss,
   },
