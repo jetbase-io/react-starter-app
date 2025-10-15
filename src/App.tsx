@@ -1,6 +1,5 @@
 import 'react-toastify/dist/ReactToastify.min.css'
 
-import type { Stripe } from '@stripe/stripe-js'
 import type { FC } from 'react'
 
 import { Elements } from '@stripe/react-stripe-js'
@@ -14,7 +13,7 @@ import routes, { privateRoutes, publicOnlyRoutes } from './routes/routes'
 import { PrivateOutlet } from './routes/components/PrivateOutlet'
 import { PublicOnlyOutlet } from './routes/components/PublicOnlyOutlet'
 
-let stripePromise: Promise<Stripe | null>
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '')
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,10 +26,6 @@ const queryClient = new QueryClient({
 })
 
 const App: FC = () => {
-  if (!stripePromise) {
-    stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || '')
-  }
-
   return (
     <QueryClientProvider client={queryClient}>
       <div>
