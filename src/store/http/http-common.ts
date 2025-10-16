@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 
 import axios from 'axios'
 
@@ -11,15 +11,15 @@ import {
 import { REFRESH_TOKEN_URL } from '../constants/api-contstants'
 import { useUserStore } from '../useUserStore'
 
-const baseURL = import.meta.env.VITE_API_URL
+export const baseURL = import.meta.env.VITE_API_URL
 
 const http = axios.create({ baseURL })
 
 http.interceptors.request.use(
-  async (config: AxiosRequestConfig) => {
+  async config => {
     const accessToken = getAccessToken()
 
-    const localConfig: AxiosRequestConfig = { ...config }
+    const localConfig: InternalAxiosRequestConfig = { ...config }
 
     localConfig.headers = config.headers ?? {}
 

@@ -21,3 +21,5 @@ export const PROFILE_ROUTE_UPDATE_USER_AVATAR = '/profile/update-user-avatar'
 export const CONTACT_US_ROUTE = '/contact-us'
 
 export const PLANS_ROUTE = '/plans'
+
+export const SUBSCRIPTIONS_ROUTE = '/subscriptions'
