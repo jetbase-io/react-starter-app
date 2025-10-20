@@ -1,9 +1,16 @@
 import { useState } from 'react'
 import { Subscription } from './components/Subscription'
 import { useSubscriptionsInteractor } from './interactor'
+import { Addon } from './components/Addon'
 
 export const SubscriptionsPage = () => {
-  const { subscriptions, subscribeHandler } = useSubscriptionsInteractor()
+  const {
+    subscriptions,
+    addons,
+    subscribeHandler,
+    onChangeSelectedAddon,
+    selectedAddonId,
+  } = useSubscriptionsInteractor()
   const [seats, setSeats] = useState(3)
 
   return (
@@ -49,6 +56,18 @@ export const SubscriptionsPage = () => {
                 isFree={parseInt(sub.price, 10) === 0}
                 seats={seats}
                 onClickSubscribe={() => subscribeHandler(sub.price_id, seats)}
+              />
+            )
+          })}
+        </div>
+        <div className="max-w-content-75 mx-auto w-full px-6">
+          {addons?.map((sub, idx) => {
+            return (
+              <Addon
+                sub={sub}
+                key={idx}
+                checked={selectedAddonId === sub.id}
+                onChangeAddon={e => onChangeSelectedAddon(sub, e)}
               />
             )
           })}

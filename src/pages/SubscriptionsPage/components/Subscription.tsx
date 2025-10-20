@@ -1,10 +1,6 @@
 import React from 'react'
 import type { SubscriptionProduct } from '../../../services/api/Payment/types'
-
-const fmt = (n: number) =>
-  n.toLocaleString(undefined, {
-    maximumFractionDigits: 0,
-  })
+import { fmt } from '../utils'
 
 const labels = (base: number, seats: number) => ({
   perSeatLabel: `Only $${fmt(base)} per month`,

@@ -9,6 +9,11 @@ export type SubscriptionProduct = {
   price_id: string
 }
 
+export type ListProductsResponse = {
+  subscriptions: SubscriptionProduct[]
+  addons: SubscriptionProduct[]
+}
+
 export type CreateSubscription = {
   priceId: string
   count: number
@@ -16,7 +21,8 @@ export type CreateSubscription = {
 
 export type CreateListSubscriptions = {
   subscriptions: CreateSubscription[]
-  redirect_origin: string
+  redirectSuccess: string
+  redirectCancel: string
 }
 
 export type CreateSubscriptionCheckoutSessionResponse = {

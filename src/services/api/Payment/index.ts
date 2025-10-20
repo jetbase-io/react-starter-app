@@ -2,14 +2,14 @@ import http from '../../../store/http/http-common'
 import type {
   CreateListSubscriptions,
   CreateSubscriptionCheckoutSessionResponse,
-  SubscriptionProduct,
+  ListProductsResponse,
 } from './types'
 
 export class PaymentApi {
   private static readonly paymentRoute: string = 'payment-perseat'
 
-  static async getSubscriptions(): Promise<SubscriptionProduct[]> {
-    const { data } = await http.get<SubscriptionProduct[]>(
+  static async getSubscriptions(): Promise<ListProductsResponse> {
+    const { data } = await http.get<ListProductsResponse>(
       `${this.paymentRoute}/products`,
     )
 
