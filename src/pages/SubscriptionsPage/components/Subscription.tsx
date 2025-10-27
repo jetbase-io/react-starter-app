@@ -13,12 +13,14 @@ export const Subscription = ({
   isFree,
   seats,
   sub,
+  anySubActive,
   onClickSubscribe,
 }: {
   isActive?: boolean
   seats: number
   isFree?: boolean
   sub: SubscriptionProduct
+  anySubActive: boolean
   onClickSubscribe?: () => void | Promise<void>
 }) => {
   const { totalLabel } = labels(parseInt(sub.price, 10), Math.max(seats, 1))
@@ -58,7 +60,7 @@ export const Subscription = ({
         onClick={onClickSubscribe}
         className="px-12 py-2 mt-12 text-sm font-bold text-center text-white uppercase bg-blue-500 rounded-md xl:px-24 sm:px-16 text-primary-very-light"
       >
-        Subscribe
+        {anySubActive ? 'Manage' : 'Subscribe'}
       </button>
     </div>
   )

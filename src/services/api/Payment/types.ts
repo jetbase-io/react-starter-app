@@ -28,3 +28,28 @@ export type CreateListSubscriptions = {
 export type CreateSubscriptionCheckoutSessionResponse = {
   checkoutUrl: string
 }
+
+export type CreateCustomerPortalSessionResponse = {
+  url: string
+  return_url: string
+}
+
+export type CreateCustomerPortalSessionParams = {
+  return_url: string
+}
+
+export enum SubscriptionStatus {
+  INVOICE_PENDING = 'INVOICE_PENDING',
+  PAUSED = 'PAUSED',
+  ACTIVE = 'ACTIVE',
+  EXPIRED = 'EXPIRED',
+  CANCELED = 'CANCELED',
+}
+
+export type CustomerActiveSubscriptionResponse = {
+  productIds: string[]
+  quantity: number
+  isAddonEnabled: boolean
+  expDate: Date
+  status: SubscriptionStatus
+}

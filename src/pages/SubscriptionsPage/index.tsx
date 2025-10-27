@@ -7,9 +7,12 @@ export const SubscriptionsPage = () => {
   const {
     subscriptions,
     addons,
+    activeSub,
     subscribeHandler,
+    navigateToPortal,
     onChangeSelectedAddon,
     selectedAddonId,
+    anySubActive,
   } = useSubscriptionsInteractor()
   const [seats, setSeats] = useState(3)
 
@@ -49,13 +52,21 @@ export const SubscriptionsPage = () => {
       <div className="block p-6 mx-auto">
         <div className="flex flex-col items-center w-full gap-4 py-12 lg:flex-row lg:justify-center lg:px-10">
           {subscriptions?.map((sub, idx) => {
+            const isActive = activeSub?.productIds.includes(sub.id)
+
             return (
               <Subscription
                 sub={sub}
                 key={idx}
                 isFree={parseInt(sub.price, 10) === 0}
                 seats={seats}
-                onClickSubscribe={() => subscribeHandler(sub.price_id, seats)}
+                isActive={isActive}
+                anySubActive={anySubActive}
+                onClickSubscribe={() =>
+                  isActive
+                    ? navigateToPortal()
+                    : subscribeHandler(sub.price_id, seats)
+                }
               />
             )
           })}
@@ -67,7 +78,13 @@ export const SubscriptionsPage = () => {
                 sub={sub}
                 key={idx}
                 checked={selectedAddonId === sub.id}
-                onChangeAddon={e => onChangeSelectedAddon(sub, e)}
+                isActive={activeSub?.isAddonEnabled}
+                anySubActive={anySubActive}
+                onChangeAddon={e =>
+                  activeSub?.isAddonEnabled
+                    ? undefined
+                    : onChangeSelectedAddon(sub, e)
+                }
               />
             )
           })}
