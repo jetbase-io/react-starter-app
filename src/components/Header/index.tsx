@@ -37,6 +37,12 @@ const Header = () => {
     },
     {
       id: 2,
+      text: 'Plans (old)',
+      to: PLANS_ROUTE,
+      isVisible: isAuthenticated,
+    },
+    {
+      id: 3,
       text: 'My Profile',
       to: PROFILE_ROUTE,
       isVisible: isAuthenticated,
