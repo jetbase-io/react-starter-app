@@ -26,7 +26,9 @@ import {
   CONTACT_US_ROUTE,
   PLANS_ROUTE,
   CONFIRMATION_ROUTE,
+  SUBSCRIPTIONS_ROUTE,
 } from '../store/constants/route-constants'
+import { SubscriptionsPage } from '../pages/SubscriptionsPage'
 
 export interface Page {
   id: number
@@ -120,6 +122,12 @@ export const privateRoutes: Page[] = [
     path: PLANS_ROUTE,
     title: 'PlansPage',
     element: <PlansPage />,
+  },
+  {
+    id: 8,
+    path: SUBSCRIPTIONS_ROUTE,
+    title: 'SubscriptionsPage',
+    element: <SubscriptionsPage />,
   },
 ]
 

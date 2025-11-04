@@ -11,6 +11,7 @@ import {
   RESET_PASSWORD_ROUTE,
   SIGN_IN_ROUTE,
   SIGN_UP_ROUTE,
+  SUBSCRIPTIONS_ROUTE,
 } from '../../store/constants/route-constants'
 
 import HeaderLink from '../HeaderLink'
@@ -28,9 +29,20 @@ const Header = () => {
 
   const LINKS = [
     { id: 0, text: 'Main', to: '/', isVisible: isAuthenticated },
-    { id: 1, text: 'Plans', to: PLANS_ROUTE, isVisible: isAuthenticated },
+    {
+      id: 1,
+      text: 'Subscriptions',
+      to: SUBSCRIPTIONS_ROUTE,
+      isVisible: isAuthenticated,
+    },
     {
       id: 2,
+      text: 'Plans (old)',
+      to: PLANS_ROUTE,
+      isVisible: isAuthenticated,
+    },
+    {
+      id: 3,
       text: 'My Profile',
       to: PROFILE_ROUTE,
       isVisible: isAuthenticated,
