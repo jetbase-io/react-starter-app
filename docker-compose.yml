@@ -16,7 +16,7 @@ services:
     expose:
       - ${PORT}
     ports:
-      - ${PORT}:3000
+      - ${PORT}:${PORT}
     env_file:
       - .env
 networks:
