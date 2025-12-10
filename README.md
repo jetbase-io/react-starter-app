@@ -87,6 +87,12 @@ You can also run the app inside a container using the provided `Dockerfile` and 
    # or
    $ curl http://$(minikube ip):30081
    ```
+   If you prefer a `kubectl port-forward`/tunnel, keep the terminal open while running:
+   ```bash
+   $ kubectl port-forward service/frontend-service 8080:3000   # exposes http://127.0.0.1:8080
+   $ kubectl port-forward service/nestjs-app  8081:3000        # backend tunnel for VITE_API_URL
+   ```
+   Alternatively, `minikube service <name> --url` opens an on-demand tunnel (also requires the terminal to stay open).
 5. Tear down the resources when finished:
    ```bash
    $ kubectl delete -f k8s/split             # when split manifests were applied
