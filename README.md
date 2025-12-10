@@ -38,6 +38,21 @@ VITE_API_URL="api_url"  # e.g. localhost:3000/api
 $ npm run start
 ```
 
+### Run with Docker
+You can also run the app inside a container using the provided `Dockerfile` and `docker-compose.yml`.
+
+1. Ensure Docker and Docker Compose are installed.
+2. Copy `.env.sample` to `.env` and populate the same variables described above (the compose file loads them automatically).
+3. Start the stack:
+   ```bash
+   $ docker compose up --build
+   ```
+   The `frontend` service builds from the local Dockerfile, mounts dependencies, and exposes the application on the port specified in your `.env` (`PORT`, defaults to `3000` in the container). The compose network (`sessions-network`) allows the frontend to communicate with other JetBase services if they are running locally.
+4. Stop and remove the containers when finished:
+   ```bash
+   $ docker compose down
+   ```
+
 ## Test
 
 ```bash
