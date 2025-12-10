@@ -54,10 +54,9 @@ You can also run the app inside a container using the provided `Dockerfile` and 
    ```
 
 ### Deploy to Kubernetes (Minikube)
-1. Start (or reuse) a Minikube cluster and enable the ingress addon:
+1. Start (or reuse) a Minikube cluster:
    ```bash
    $ minikube start
-   $ minikube addons enable ingress
    ```
 2. Make sure your `.env` contains the correct `VITE_*` values (they are compiled into the image) and build the Docker image inside the Minikube registry:
    ```bash
@@ -66,18 +65,20 @@ You can also run the app inside a container using the provided `Dockerfile` and 
    ```
 3. Apply either the split manifests or the combined manifest:
    ```bash
-   # split resources (ConfigMap, Deployment, Service, Ingress in separate files)
+   # split resources (ConfigMap, Deployment, Service in separate files)
    $ kubectl apply -f k8s/split
 
    # combined stack (single multi-document file)
-   $ kubectl apply -f k8s/combined/frontend-stack.yaml
+   $ kubectl apply -f k8s/combined/app.yaml
    ```
-   The `frontend-config` ConfigMap currently controls the container `PORT` (defaults to `3000`).
-4. Add a host entry pointing `frontend.local` to the Minikube IP and browse the app:
+   The `frontend-config` ConfigMap currently controls the container `PORT` (defaults to `3000`). The `frontend-service` is exposed as a NodePort (30081) so it can coexist with the existing `nestjs-app` NodePort (30080).
+4. Access the app through the NodePort:
    ```bash
-   $ echo \"$(minikube ip) frontend.local\" | sudo tee -a /etc/hosts
+   $ minikube service frontend-service --url
+   # or
+   $ curl http://$(minikube ip):30081
    ```
-5. Tearing down:
+5. Tear down the resources when finished:
    ```bash
    $ kubectl delete -f k8s/split             # when split manifests were applied
    $ kubectl delete -f k8s/combined/app.yaml

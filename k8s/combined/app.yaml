@@ -55,33 +55,12 @@ metadata:
     app: frontend
   namespace: default
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: frontend
   ports:
-    - port: 80
+    - name: http
+      port: 3000
       targetPort: 3000
       protocol: TCP
-      name: http
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: frontend-ingress
-  labels:
-    app: frontend
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: nginx
-spec:
-  rules:
-    - host: frontend.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend-service
-                port:
-                  number: 80
+      nodePort: 30081
