@@ -63,7 +63,11 @@ You can also run the app inside a container using the provided `Dockerfile` and 
    $ minikube image build -t frontend:local .
    # or: eval $(minikube docker-env) && docker build -t frontend:local .
    ```
-3. Apply either the split manifests or the combined manifest:
+3. Update the manifests with your runtime settings (if needed):
+   - `k8s/split/configmap.yaml` (or the ConfigMap section in `k8s/combined/app.yaml`) defines defaults for `PORT` and `VITE_API_URL`.
+   - `k8s/split/secret.yaml` (or the Secret section in `k8s/combined/app.yaml`) can hold a sensitive override for `VITE_API_URL`. Because it is applied after the ConfigMap in the `envFrom` list, it wins when both specify `VITE_API_URL`.
+
+   Then apply either the split manifests or the combined manifest:
    ```bash
    # split resources (ConfigMap, Deployment, Service in separate files)
    $ kubectl apply -f k8s/split

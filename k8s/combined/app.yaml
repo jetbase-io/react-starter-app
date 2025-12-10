@@ -7,6 +7,18 @@ metadata:
   namespace: default
 data:
   PORT: "3000"
+  VITE_API_URL: "http://127.0.0.1:57826/api"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: frontend-secrets
+  labels:
+    app: frontend
+  namespace: default
+type: Opaque
+stringData:
+  VITE_STRIPE_PUBLIC_KEY: ""
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -27,13 +39,15 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: react-starter-app:latest
+          image: react-starter-app-frontend:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
           envFrom:
             - configMapRef:
                 name: frontend-config
+            - secretRef:
+                name: frontend-secrets
           readinessProbe:
             httpGet:
               path: /
