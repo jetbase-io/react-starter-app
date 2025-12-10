@@ -53,6 +53,36 @@ You can also run the app inside a container using the provided `Dockerfile` and 
    $ docker compose down
    ```
 
+### Deploy to Kubernetes (Minikube)
+1. Start (or reuse) a Minikube cluster and enable the ingress addon:
+   ```bash
+   $ minikube start
+   $ minikube addons enable ingress
+   ```
+2. Make sure your `.env` contains the correct `VITE_*` values (they are compiled into the image) and build the Docker image inside the Minikube registry:
+   ```bash
+   $ minikube image build -t frontend:local .
+   # or: eval $(minikube docker-env) && docker build -t frontend:local .
+   ```
+3. Apply either the split manifests or the combined manifest:
+   ```bash
+   # split resources (ConfigMap, Deployment, Service, Ingress in separate files)
+   $ kubectl apply -f k8s/split
+
+   # combined stack (single multi-document file)
+   $ kubectl apply -f k8s/combined/frontend-stack.yaml
+   ```
+   The `frontend-config` ConfigMap currently controls the container `PORT` (defaults to `3000`).
+4. Add a host entry pointing `frontend.local` to the Minikube IP and browse the app:
+   ```bash
+   $ echo \"$(minikube ip) frontend.local\" | sudo tee -a /etc/hosts
+   ```
+5. Tearing down:
+   ```bash
+   $ kubectl delete -f k8s/split             # when split manifests were applied
+   $ kubectl delete -f k8s/combined/app.yaml
+   ```
+
 ## Test
 
 ```bash
