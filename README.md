@@ -62,7 +62,7 @@ You can also run the app inside a container using the provided `Dockerfile` and 
    ```bash
    $ minikube start
    $ eval "$(minikube docker-env)"               # point Docker CLI to Minikube
-   $ docker build -t frontend:local \            # build with VITE_* args
+   $ docker build -t react-starter-app-frontend:latest \            # build with VITE_* args
        --build-arg VITE_API_URL=$VITE_API_URL \
        --build-arg VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY \
        .
