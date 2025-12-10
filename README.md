@@ -58,10 +58,15 @@ You can also run the app inside a container using the provided `Dockerfile` and 
    ```bash
    $ minikube start
    ```
-2. Make sure your `.env` contains the correct `VITE_*` values (they are compiled into the image) and build the Docker image inside the Minikube registry:
+2. Make sure your `.env` contains the correct `VITE_*` values (they are compiled into the image). When you need to pass build arguments (e.g., `VITE_API_URL`), switch your shell to the Minikube Docker daemon and build there so Kubernetes can pull the result:
    ```bash
-   $ minikube image build -t frontend:local .
-   # or: eval $(minikube docker-env) && docker build -t frontend:local .
+   $ minikube start
+   $ eval "$(minikube docker-env)"               # point Docker CLI to Minikube
+   $ docker build -t frontend:local \            # build with VITE_* args
+       --build-arg VITE_API_URL=$VITE_API_URL \
+       --build-arg VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY \
+       .
+   $ eval "$(minikube docker-env -u)"            # optional: restore host Docker
    ```
 3. Update the manifests with your runtime settings (if needed):
    - `k8s/split/configmap.yaml` (or the ConfigMap section in `k8s/combined/app.yaml`) defines defaults for `PORT` and `VITE_API_URL`.
