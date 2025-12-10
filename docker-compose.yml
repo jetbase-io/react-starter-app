@@ -2,10 +2,13 @@ version: '3.5'
 
 services:
   frontend:
-    container_name: react-admin
+    container_name: react-frontend
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_STRIPE_PUBLIC_KEY: ${VITE_STRIPE_PUBLIC_KEY}
     networks:
       - basenet
     volumes:
